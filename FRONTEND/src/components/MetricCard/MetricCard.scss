@@ -1,0 +1,21 @@
+.metric-card {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--brand);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 12px 24px rgba(11, 94, 158, 0.06);
+}
+
+.metric-card strong {
+  display: block;
+  color: var(--brand);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.metric-card span {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+}

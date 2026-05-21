@@ -128,6 +128,7 @@ dist
 .pnp.*
 
 # Vite
+.vite-cache/
 dist/
 dist-ssr/
 *.local

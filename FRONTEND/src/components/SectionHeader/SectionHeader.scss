@@ -1,0 +1,23 @@
+.section-header {
+  margin: 34px 0 18px;
+}
+
+.section-header span {
+  color: var(--brand-2);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.section-header h2 {
+  margin: 6px 0 8px;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.08;
+}
+
+.section-header p {
+  max-width: 780px;
+  color: var(--muted);
+  line-height: 1.7;
+}

@@ -1,0 +1,149 @@
+:root {
+  --bg: #eef5fb;
+  --surface: #ffffff;
+  --surface-strong: #f7fbff;
+  --ink: #17243a;
+  --muted: #5b6f83;
+  --line: #d7e4ef;
+  --brand: #0b5e9e;
+  --brand-2: #12986f;
+  --brand-soft: #e6f3ff;
+  --focus: #f5b51b;
+  --shadow: 0 16px 34px rgba(11, 94, 158, 0.08);
+  --radius: 8px;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.page-kicker {
+  display: inline-block;
+  color: var(--brand-2);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.empty-record-page {
+  width: min(1180px, calc(100% - 32px));
+  min-height: calc(100vh - 172px);
+  margin: 0 auto;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.empty-record-page h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.empty-record-page p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.empty-record-page button,
+.print-toolbar button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: var(--brand);
+  padding: 0 16px;
+  font-weight: 800;
+}
+
+.print-toolbar {
+  width: min(980px, calc(100% - 32px));
+  margin: 24px auto 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.printable-paper {
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto 44px;
+  color: #211c13;
+  background: #fff;
+  box-shadow: 0 20px 40px rgba(11, 94, 158, 0.12);
+}
+
+.paper-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  margin-top: 20px;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .paper-meta-grid,
+  .print-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .print-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .site-header,
+  .site-footer,
+  .print-toolbar {
+    display: none !important;
+  }
+
+  .printable-paper {
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,52 @@
+.student-marksheet-page {
+  min-height: calc(100vh - 172px);
+  padding-bottom: 46px;
+}
+
+.marksheet-paper {
+  padding: 32px;
+  border: 1px solid #c8d5df;
+}
+
+.marksheet-paper header {
+  text-align: center;
+}
+
+.marksheet-paper header span {
+  color: var(--brand);
+  font-weight: 900;
+}
+
+.marksheet-paper h1 {
+  margin: 8px 0;
+  font-family: Georgia, serif;
+  font-size: 2.3rem;
+}
+
+.marksheet-paper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 22px;
+}
+
+.marksheet-paper th,
+.marksheet-paper td {
+  border: 1px solid #c8d5df;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.marksheet-paper th {
+  background: var(--brand-soft);
+}
+
+@media print {
+  .student-marksheet-page {
+    padding: 0;
+  }
+
+  .marksheet-paper {
+    padding: 12mm;
+    border: 0;
+  }
+}
