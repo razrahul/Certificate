@@ -1,27 +1,46 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { printQueue } from '../../services/certificateService'
 import { searchCertificateAction } from '../action/certificateAction'
 
-const today = new Date()
-const daysAgo = (days) => {
-  const date = new Date(today)
-  date.setDate(date.getDate() - days)
-  return date.toISOString()
+const firstValue = (record, keys) => {
+  for (const key of keys) {
+    if (record?.[key] !== undefined && record[key] !== null && record[key] !== '') {
+      return record[key]
+    }
+  }
+
+  return ''
 }
 
+const normalizeCertificateRecord = (record, filters) => ({
+  ...record,
+  className: firstValue(record, ['className', 'standard', 'Standard']) || filters.standard,
+  category: firstValue(record, ['category', 'Cat']),
+  centre: firstValue(record, ['centre', 'Centre']),
+  district: firstValue(record, ['district', 'District']) || filters.district,
+  dob: firstValue(record, ['dob', 'DOB']),
+  fatherName: firstValue(record, ['fatherName', 'Father', 'FName', 'FatherName', 'father_name']),
+  id:
+    firstValue(record, ['id', '_id', 'Rgn', 'registrationNo', 'RollNo', 'rollNo']) ||
+    `tr-${Date.now()}`,
+  madrasaName: firstValue(record, ['madrasaName', 'Madrasa', 'NomMad']),
+  marks: firstValue(record, ['marks', 'TotMs', 'Marks', 'Total', 'total', 'TotalMarks']),
+  motherName: firstValue(record, ['motherName', 'Mother', 'MName', 'MotherName', 'mother_name']),
+  registrationNo: firstValue(record, ['registrationNo', 'Rgn', 'RegNo', 'RegistrationNo']),
+  rollNo: firstValue(record, ['rollNo', 'RollNo', 'Roll']),
+  sex: firstValue(record, ['sex', 'Sex']),
+  standard: firstValue(record, ['standard', 'Standard']) || filters.standard,
+  studentName: firstValue(record, ['studentName', 'Name', 'StudentName', 'student_name']),
+  year: firstValue(record, ['year', 'Year']) || filters.year,
+})
+
 const initialState = {
-  activeStudentId: printQueue[0]?.id,
+  activeStudentId: null,
   error: '',
   lastSearch: null,
-  printHistory: [
-    { id: 'prt-001', certificateId: 'std-001', printedAt: today.toISOString() },
-    { id: 'prt-002', certificateId: 'std-002', printedAt: daysAgo(2) },
-    { id: 'prt-003', certificateId: 'std-003', printedAt: daysAgo(16) },
-    { id: 'prt-004', certificateId: 'std-001', printedAt: daysAgo(72) },
-  ],
+  printHistory: [],
   searchResult: null,
   searchStatus: 'idle',
-  students: printQueue,
+  students: [],
 }
 
 const certificateSlice = createSlice({
@@ -62,15 +81,13 @@ const certificateSlice = createSlice({
       .addCase(searchCertificateAction.fulfilled, (state, action) => {
         const filters = state.lastSearch || {}
         const record = action.payload
+        const normalizedRecord = normalizeCertificateRecord(record, filters)
 
         state.error = ''
-        state.searchResult = {
-          ...record,
-          className: record.className || record.standard || filters.standard,
-          district: record.district || filters.district,
-          year: record.year || filters.year,
-        }
+        state.activeStudentId = normalizedRecord.id
+        state.searchResult = normalizedRecord
         state.searchStatus = 'succeeded'
+        state.students = [normalizedRecord]
       })
       .addCase(searchCertificateAction.rejected, (state, action) => {
         state.error = action.payload || 'Certificate record not found'
@@ -88,6 +105,7 @@ export const {
 } = certificateSlice.actions
 
 export const selectActiveStudent = (state) =>
+  state.certificate.searchResult ||
   state.certificate.students.find(
     (student) => student.id === state.certificate.activeStudentId,
   )

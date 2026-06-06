@@ -1,7 +1,33 @@
-
-
-export const tableName = {
-    2026: "data2026",
-    2025: "userBtable",
-    2024: "tabletoprofile",
+const tableNames = {
+    fauquania: {
+        2026: "fauquania26",
+        2025: "fauquania25",
+        2024: "fauquania24",
+    },
+    moulvi: {
+        2026: "moulvi26",
+        2025: "moulvi25",
+        2024: "moulvi24",
+    },
 }
+
+
+const getTableNameCertificate = (year, standard) => {
+    return tableNames[standard.toLowerCase()]?.[year];
+};
+
+
+const getTableNameCertficatefromBody = (year, standard) => {
+    const lastTwoDigits = String(year).slice(-2);
+    const tableName = `${standard.toLowerCase()}${lastTwoDigits}`;
+    return tableName;
+};
+
+
+const contex = {
+    getTableNameCertificate,
+    getTableNameCertficatefromBody,
+    tableName: tableNames,
+};
+
+export default contex;

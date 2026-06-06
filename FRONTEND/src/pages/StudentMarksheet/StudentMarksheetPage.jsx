@@ -1,13 +1,17 @@
 import { useSelector } from 'react-redux'
+import {
+  divisionFromCode,
+  getFullMarks,
+  getTotalMarks,
+  getTrSubjects,
+} from '../../utils/certificate'
 import './StudentMarksheetPage.scss'
 
 function StudentMarksheetPage({ onRouteChange }) {
   const student = useSelector((state) => state.certificate.searchResult)
-  const totalFullMarks =
-    student?.subjects?.reduce((sum, subject) => sum + subject.fullMarks, 0) || 500
-  const totalObtained =
-    student?.subjects?.reduce((sum, subject) => sum + subject.obtained, 0) ||
-    Number(student?.marks || 0)
+  const subjects = getTrSubjects(student)
+  const totalFullMarks = getFullMarks(student)
+  const totalObtained = getTotalMarks(student)
 
   if (!student) {
     return (
@@ -47,7 +51,9 @@ function StudentMarksheetPage({ onRouteChange }) {
           <span>Roll No: {student.rollNo}</span>
           <span>Registration No: {student.registrationNo}</span>
           <span>District: {student.district}</span>
-          <span>Madrasa: {student.madrasaName}</span>
+          <span>Madrasa: {student.madrasaName || student.NomMad}</span>
+          <span>Centre: {student.centre || student.Centre}</span>
+          <span>Division: {divisionFromCode(student.Div, totalObtained)}</span>
         </div>
 
         <table>
@@ -59,7 +65,7 @@ function StudentMarksheetPage({ onRouteChange }) {
             </tr>
           </thead>
           <tbody>
-            {student.subjects.map((subject) => (
+            {subjects.map((subject) => (
               <tr key={subject.name}>
                 <td>{subject.name}</td>
                 <td>{subject.fullMarks}</td>
