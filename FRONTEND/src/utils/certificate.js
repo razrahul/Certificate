@@ -124,6 +124,11 @@ export const formatDate = (value) => {
     return ''
   }
 
+  if (/^\d{2}-\d{2}-\d{4}$/.test(value)) {
+    const [day, month, year] = value.split('-')
+    return `${day} ${month} ${year}`
+  }
+
   return new Intl.DateTimeFormat('en-IN', {
     day: '2-digit',
     month: 'short',

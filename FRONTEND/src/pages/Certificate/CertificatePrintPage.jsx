@@ -4,7 +4,8 @@ import { searchCertificateAction } from "../../redux/action/certificateAction";
 import {
   classOptions,
   districtOptions,
-  divisionFromMarks,
+  divisionFromCode,
+  getTotalMarks,
   searchByOptions,
   yearOptions,
 } from "../../utils/certificate";
@@ -12,7 +13,7 @@ import "./CertificatePrintPage.scss";
 
 const initialSearch = {
   year: yearOptions[0],
-  standard: classOptions[0],
+  standard: "Fauquania",
   district: districtOptions[0],
   searchBy: searchByOptions[0].value,
   searchValue: "",
@@ -38,11 +39,7 @@ function CertificatePrintPage({ onRouteChange }) {
     dispatch(searchCertificateAction(filters));
   };
 
-  const totalObtained =
-    previewRecord?.subjects?.reduce(
-      (sum, subject) => sum + subject.obtained,
-      0,
-    ) || Number(previewRecord?.marks || 0);
+  const totalObtained = getTotalMarks(previewRecord);
 
   return (
     <div className="certificate-page certificate-lookup-page">
@@ -135,10 +132,16 @@ function CertificatePrintPage({ onRouteChange }) {
               </span>
               <span>District : {displayValue(previewRecord.district)}</span>
               <span>Total No : {displayValue(totalObtained)}</span>
-              <span>Division : {divisionFromMarks(totalObtained)}</span>
+              <span>
+                Division : {divisionFromCode(previewRecord.Div, totalObtained)}
+              </span>
             </div>
             <div className="result-actions">
-              <button onClick={() => onRouteChange("student")} type="button">
+              <button
+                className="result-action-primary"
+                onClick={() => onRouteChange("student")}
+                type="button"
+              >
                 View
               </button>
               <button
@@ -160,7 +163,7 @@ function CertificatePrintPage({ onRouteChange }) {
         </section>
       ) : (
         <section className="lookup-empty-state">
-          Search ke baad matching dummy record milne par student summary yahan
+          Search ke baad matching TR record milne par student summary yahan
           dikhaya jayega.
         </section>
       )}

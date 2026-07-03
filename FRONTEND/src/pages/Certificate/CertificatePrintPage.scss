@@ -128,18 +128,37 @@
 }
 
 .result-actions button {
-  min-height: 44px;
-  border: 1px solid rgba(237, 247, 255, 0.65);
+  min-height: 48px;
+  border: 1px solid rgba(237, 247, 255, 0.68);
   border-radius: 8px;
   color: #fff;
   background: rgba(255, 255, 255, 0.08);
   font-weight: 900;
+  letter-spacing: 0;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.result-actions .result-action-primary {
+  color: #092b44;
+  background: var(--focus);
+  border-color: var(--focus);
+  box-shadow: 0 12px 22px rgba(245, 181, 27, 0.22);
 }
 
 .result-actions button:hover {
   color: #0b2c47;
   background: var(--focus);
   border-color: var(--focus);
+  transform: translateY(-1px);
+}
+
+.result-actions .result-action-primary:hover {
+  background: #ffd35d;
+  border-color: #ffd35d;
 }
 
 @media (max-width: 900px) {

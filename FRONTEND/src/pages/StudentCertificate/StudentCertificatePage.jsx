@@ -11,9 +11,7 @@ import './StudentCertificatePage.scss'
 function StudentCertificatePage({ onRouteChange }) {
   const dispatch = useDispatch()
   const student = useSelector((state) => state.certificate.searchResult)
-  const totalObtained =
-    student?.subjects?.reduce((sum, subject) => sum + subject.obtained, 0) ||
-    Number(student?.marks || 0)
+  const totalObtained = getTotalMarks(student)
 
   const handlePrint = () => {
     dispatch(markCertificatePrinted(student.id))
@@ -56,14 +54,18 @@ function StudentCertificatePage({ onRouteChange }) {
           <strong>
             {student.className} Examination {student.year}
           </strong>{' '}
-          from {student.madrasaName}, District {student.district}.
+          from {student.madrasaName || student.NomMad}, District{' '}
+          {student.district}.
         </p>
         <div className="paper-meta-grid">
           <span>Roll No: {student.rollNo}</span>
           <span>Registration No: {student.registrationNo}</span>
+          <span>Date of Birth: {formatDate(student.dob || student.DOB)}</span>
+          <span>Centre: {student.centre || student.Centre}</span>
           <span>Total Marks: {totalObtained}</span>
-          <span>Division: {divisionFromMarks(totalObtained)}</span>
-          <span>Date: {formatDate(student.issueDate)}</span>
+          <span>Division: {divisionFromCode(student.Div, totalObtained)}</span>
+          <span>TR Page: {student.TrPg || 'N/A'}</span>
+          <span>TR Serial: {student.TrSl || student.TrPgSl || 'N/A'}</span>
         </div>
         <footer>
           <span>Prepared By</span>
