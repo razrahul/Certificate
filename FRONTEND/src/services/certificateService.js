@@ -1,40 +1,69 @@
+import axios from 'axios'
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1'
 
-const parseApiResponse = async (response) => {
-  const payload = await response.json().catch(() => ({}))
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+})
 
-  if (!response.ok) {
-    throw new Error(payload.message || 'Request failed')
+const getApiErrorMessage = (error) => {
+  if (axios.isAxiosError(error)) {
+    return (
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      'Request failed'
+    )
   }
 
-  return payload
+  return error?.message || 'Request failed'
+}
+
+const unwrapApiPayload = (payload) => {
+  return payload.data || payload.record || payload.student || payload
 }
 
 export const loginUser = async ({ loginId, password }) => {
-  const response = await fetch(`${API_BASE_URL}/user/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
+  try {
+    const response = await apiClient.post('/user/login', {
       email: loginId,
       username: loginId,
       password,
-    }),
-  })
-  const payload = await parseApiResponse(response)
+    })
 
-  return payload.data || payload.user || payload
+    return response.data.data || response.data.user || response.data
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error), { cause: error })
+  }
 }
 
 export const searchCertificateRecord = async (filters) => {
+<<<<<<< Updated upstream
   const response = await fetch(`${API_BASE_URL}/certificate/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(filters),
   })
   const payload = await parseApiResponse(response)
+=======
+  try {
+    const response = await apiClient.post('/certificate/searchTR', {
+      ...filters,
+      searchBy:
+        filters.searchBy === 'registrationNo'
+          ? 'Rgn'
+          : filters.searchBy === 'rollNo'
+            ? 'RollNo'
+            : filters.searchBy,
+    })
+>>>>>>> Stashed changes
 
-  return payload.data || payload.record || payload.student || payload
+    return unwrapApiPayload(response.data)
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error), { cause: error })
+  }
 }
 
 export const demoStudents = [

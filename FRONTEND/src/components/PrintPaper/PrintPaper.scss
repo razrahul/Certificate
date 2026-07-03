@@ -1,0 +1,63 @@
+.print-paper {
+  width: 210mm;
+  height: 295.5mm; // Approx 1.5mm smaller than A4 height (297mm) to give browser buffer on screen
+  margin: 10px auto 40px;
+  box-sizing: border-box;
+  position: relative;
+  font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
+  color: #111;
+  background-color: #fff;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+
+  &.marksheet-paper {
+    padding: 15mm 16mm 15mm 16mm;
+
+    &.show-bg {
+      background-image: url('/template.jpeg');
+      border: none;
+    }
+
+    &.hide-bg {
+      background-image: none;
+      border: 1px solid #c8d5df;
+    }
+  }
+
+  &.certificate-paper {
+    padding: 18mm 20mm;
+    border: 8px double var(--brand, #0b5e9e);
+  }
+
+  @media print {
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 210mm !important;
+    height: 297mm !important; // Exact standard A4 print size
+    page-break-after: always;
+    page-break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+
+    &.marksheet-paper {
+      &.show-bg {
+        background-image: url('/template.jpeg') !important;
+        background-size: 100% 100% !important;
+      }
+      &.hide-bg {
+        background-image: none !important;
+        background-color: transparent !important;
+      }
+    }
+
+    &.certificate-paper {
+      border: 8px double var(--brand, #0b5e9e) !important;
+      &.hide-bg {
+        background-color: transparent !important;
+      }
+    }
+  }
+}

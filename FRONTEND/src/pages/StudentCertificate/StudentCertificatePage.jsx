@@ -1,6 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { markCertificatePrinted } from '../../redux/reducer/certificateSlice'
+<<<<<<< Updated upstream
 import { divisionFromMarks, formatDate } from '../../utils/certificate'
+=======
+import {
+  divisionFromCode,
+  formatDate,
+  getTotalMarks,
+} from '../../utils/certificate'
+import PrintPaper from '../../components/PrintPaper/PrintPaper'
+>>>>>>> Stashed changes
 import './StudentCertificatePage.scss'
 
 function StudentCertificatePage({ onRouteChange }) {
@@ -38,7 +47,7 @@ function StudentCertificatePage({ onRouteChange }) {
         </button>
       </div>
 
-      <section className="certificate-paper printable-paper">
+      <PrintPaper showBackground={false} type="certificate">
         <header>
           <div>B</div>
           <span>Bihar State Madrasa Education Board, Patna</span>
@@ -65,7 +74,7 @@ function StudentCertificatePage({ onRouteChange }) {
           <span>Controller of Examination</span>
           <span>Chairman</span>
         </footer>
-      </section>
+      </PrintPaper>
     </div>
   )
 }
