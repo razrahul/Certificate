@@ -3,11 +3,6 @@
   padding-bottom: 46px;
 }
 
-.certificate-paper {
-  min-height: 620px;
-  padding: 42px;
-  border: 8px double var(--brand);
-}
 
 .certificate-paper header {
   text-align: center;
@@ -65,8 +60,4 @@
     padding: 0;
   }
 
-  .certificate-paper {
-    min-height: 260mm;
-    padding: 14mm;
-  }
 }

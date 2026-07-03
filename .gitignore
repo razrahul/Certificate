@@ -96,3 +96,11 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+
+#  ye project ke liye nahi h
+.codexignore
+pnpm-store/
+pnpm-lock.yaml
+vite.err.log
+vite.out.log

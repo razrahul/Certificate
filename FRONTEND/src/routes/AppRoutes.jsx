@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import AppShell from '../container/AppShell'
 import AboutPage from '../pages/About/AboutPage'
-import CertificatePrintPage from '../pages/certificate/CertificatePrintPage'
+import CertificateSearch from '../pages/Certificate/CertificateSearch'
 import DashboardPage from '../pages/Dashboard/DashboardPage'
 import HomePage from '../pages/Home/HomePage'
 import LoginPage from '../pages/Login/LoginPage'
@@ -15,7 +15,7 @@ import { hiddenRoutes, pathToRouteId, routes } from './routeConfig'
 
 const pageMap = {
   home: HomePage,
-  certificate: CertificatePrintPage,
+  certificate: CertificateSearch,
   about: AboutPage,
   dashboard: DashboardPage,
   login: LoginPage,

@@ -1,52 +1,437 @@
 .student-marksheet-page {
   min-height: calc(100vh - 172px);
   padding-bottom: 46px;
+  background-color: #f0f4f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.marksheet-paper {
-  padding: 32px;
-  border: 1px solid #c8d5df;
+.print-toolbar {
+  width: min(980px, calc(100% - 32px));
+  margin: 24px auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(11, 94, 158, 0.08);
+
+  .toggle-bg-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    margin-right: auto;
+
+    input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:first-of-type {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+
+      &:hover {
+        background: #e2e8f0;
+      }
+    }
+
+    &:last-of-type {
+      background: var(--brand, #0b5e9e);
+      color: #fff;
+      border: none;
+
+      &:hover {
+        opacity: 0.95;
+      }
+    }
+  }
 }
 
-.marksheet-paper header {
+
+.ms-no-overlay {
+  position: absolute;
+  right: 22mm;
+  top: 15mm;
+  font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+
+
+.marksheet-content {
+  display: block;
+  height: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.header-padding {
+  height: 70mm; // Spacers to push content below the board logo and headers in template.jpg
+}
+
+.exam-title {
   text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 18px 0;
+  text-decoration: none;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #0b5e9e;
+  display: block;
+  padding-bottom: 3px;
+
+  sup {
+    text-transform: none;
+  }
 }
 
-.marksheet-paper header span {
-  color: var(--brand);
-  font-weight: 900;
+.student-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+
+  .info-row {
+    display: flex;
+    width: 100%;
+
+    &.split {
+      justify-content: space-between;
+
+      .info-cell {
+        width: 48%;
+      }
+    }
+  }
+
+  .info-cell {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+
+    &.full-width {
+      width: 100%;
+    }
+
+    .label {
+      width: 150px;
+      flex-shrink: 0;
+      letter-spacing: 0.2px;
+    }
+
+    .dots {
+      width: 15px;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    .value {
+      flex-grow: 1;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      font-size: 13.5px;
+    }
+  }
 }
 
-.marksheet-paper h1 {
-  margin: 8px 0;
-  font-family: Georgia, serif;
-  font-size: 2.3rem;
-}
-
-.marksheet-paper table {
+.marksheet-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 22px;
+  margin-top: 8px;
+  font-size: 12.5px;
+  border: 1.5px solid #000;
+
+  th,
+  td {
+    border: 1px solid #000;
+    padding: 4px 8px;
+    vertical-align: middle;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  td:first-child {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+  }
+
+  th {
+    background: #f1f5f9;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+    height: 28px;
+  }
+
+  // Column widths based on designer measurements (Total width = 16cm)
+  // col-sub  = 6.1cm / 16cm = 38.125%
+  // col-full = 2.1cm / 16cm = 13.125%
+  // col-pass = 2.1cm / 16cm = 13.125%
+  // col-obt  = 2.1cm / 16cm = 13.125%
+  // col-rem  = 3.6cm / 16cm = 22.5%
+  .col-sub {
+    width: 38.125%;
+    text-align: left;
+  }
+
+  .col-full {
+    width: 13.125%;
+    text-align: center;
+  }
+
+  .col-pass {
+    width: 13.125%;
+    text-align: center;
+  }
+
+  .col-obt {
+    width: 13.125%;
+    text-align: center;
+  }
+
+  .col-rem {
+    width: 22.5%;
+    text-align: center;
+  }
+
+  .center-text {
+    text-align: center;
+  }
+
+  .bold-text {
+    font-weight: 800;
+  }
+
+  .merged-pass-marks {
+    text-align: center;
+    font-weight: 800;
+  }
+
+  .merged-remarks-rules {
+    padding: 10px;
+    vertical-align: top;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.4;
+    border-bottom: 1px dotted #000 !important;
+
+    strong {
+      display: block;
+      margin-bottom: 6px;
+      text-align: center;
+      font-size: 14.5px;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      // text-decoration: underline;
+    }
+
+    .rule-item {
+      margin-left: 6px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+
+    }
+  }
+
+  .merged-remarks-status {
+    border-top: 1px dotted #000 !important;
+    border-bottom: 1px dotted #000 !important;
+    padding: 0;
+    vertical-align: stretch;
+    height: 100%;
+
+    .status-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 140px;
+      align-items: stretch;
+
+      .status-row {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 12px 10px;
+        text-align: center;
+
+        &.border-top-dash {
+          border-top: 1px dashed #000;
+        }
+
+        .status-label {
+          font-size: 14px;
+          letter-spacing: 0.8px;
+          // text-transform: uppercase;
+          font-weight: 700;
+          color: #475569;
+          // margin-bottom: 2px;
+        }
+
+        .status-val {
+          font-size: 12.5px;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  .aggregate-row {
+    td:last-child {
+      border-top: 1px dotted #000 !important;
+    }
+  }
+
+  // Science cell split formatting
+  .sci-cell {
+    padding: 0 !important;
+  }
+
+  .sci-split {
+    text-align: center;
+    padding: 4px 8px;
+    font-weight: 600;
+  }
+
+  .sci-total {
+    text-align: center;
+    padding: 4px 8px;
+  }
+
+  .border-top-solid {
+    border-top: 1px solid #000;
+  }
+
 }
 
-.marksheet-paper th,
-.marksheet-paper td {
-  border: 1px solid #c8d5df;
-  padding: 10px 12px;
-  text-align: left;
+.marksheet-words-section {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 13px;
+
+  .bold-text {
+    flex-shrink: 0;
+    margin-right: 8px;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    font-weight: 800;
+  }
+
+  .words-value {
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
 }
 
-.marksheet-paper th {
-  background: var(--brand-soft);
+.marksheet-footer {
+  position: absolute;
+  bottom: 8mm;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+
+  .footer-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .label {
+      margin-right: 4px;
+    }
+
+    .dots {
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .footer-sigs {
+    margin-left: 12px;
+    display: flex;
+    justify-content: space-between;
+    width: 460px;
+
+    .sig-block {
+      text-align: center;
+      width: 80px;
+      padding-top: 4px;
+    }
+  }
 }
 
 @media print {
-  .student-marksheet-page {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body {
+    background: #fff;
+    margin: 0;
     padding: 0;
   }
 
-  .marksheet-paper {
-    padding: 12mm;
-    border: 0;
+  .app-shell,
+  .app-main {
+    min-height: auto !important;
+    display: block !important;
   }
+
+  .student-marksheet-page {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+    background: none !important;
+  }
+
+  .print-toolbar {
+    display: none !important;
+  }
+
 }
