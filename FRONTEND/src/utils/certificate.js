@@ -124,16 +124,23 @@ export const formatDate = (value) => {
     return ''
   }
 
+  // If already in DD-MM-YYYY format, keep it as-is
   if (/^\d{2}-\d{2}-\d{4}$/.test(value)) {
-    const [day, month, year] = value.split('-')
-    return `${day} ${month} ${year}`
+    return value
   }
 
-  return new Intl.DateTimeFormat('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(value))
+  // Parse and format other Date formats to DD-MM-YYYY with dashes
+  try {
+    const d = new Date(value)
+    if (isNaN(d.getTime())) return value
+
+    const day = String(d.getDate()).padStart(2, '0')
+    const month = String(d.getMonth() + 1).padStart(2, '0')
+    const year = d.getFullYear()
+    return `${day}-${month}-${year}`
+  } catch {
+    return value
+  }
 }
 
 export const numberToWords = (num) => {
