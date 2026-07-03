@@ -1,15 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { markCertificatePrinted } from '../../redux/reducer/certificateSlice'
-<<<<<<< Updated upstream
-import { divisionFromMarks, formatDate } from '../../utils/certificate'
-=======
 import {
   divisionFromCode,
   formatDate,
   getTotalMarks,
 } from '../../utils/certificate'
 import PrintPaper from '../../components/PrintPaper/PrintPaper'
->>>>>>> Stashed changes
 import './StudentCertificatePage.scss'
 
 function StudentCertificatePage({ onRouteChange }) {

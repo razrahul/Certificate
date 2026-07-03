@@ -40,14 +40,6 @@ export const loginUser = async ({ loginId, password }) => {
 }
 
 export const searchCertificateRecord = async (filters) => {
-<<<<<<< Updated upstream
-  const response = await fetch(`${API_BASE_URL}/certificate/search`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(filters),
-  })
-  const payload = await parseApiResponse(response)
-=======
   try {
     const response = await apiClient.post('/certificate/searchTR', {
       ...filters,
@@ -58,7 +50,6 @@ export const searchCertificateRecord = async (filters) => {
             ? 'RollNo'
             : filters.searchBy,
     })
->>>>>>> Stashed changes
 
     return unwrapApiPayload(response.data)
   } catch (error) {

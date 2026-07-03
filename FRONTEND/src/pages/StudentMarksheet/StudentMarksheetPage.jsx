@@ -1,15 +1,3 @@
-<<<<<<< Updated upstream
-import { useSelector } from 'react-redux'
-import './StudentMarksheetPage.scss'
-
-function StudentMarksheetPage({ onRouteChange }) {
-  const student = useSelector((state) => state.certificate.searchResult)
-  const totalFullMarks =
-    student?.subjects?.reduce((sum, subject) => sum + subject.fullMarks, 0) || 500
-  const totalObtained =
-    student?.subjects?.reduce((sum, subject) => sum + subject.obtained, 0) ||
-    Number(student?.marks || 0)
-=======
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import PrintPaper from "../../components/PrintPaper/PrintPaper";
@@ -25,7 +13,6 @@ import "./StudentMarksheetPage.scss";
 function StudentMarksheetPage({ onRouteChange }) {
   const student = useSelector((state) => state.certificate.searchResult);
   const [showBackground, setShowBackground] = useState(true);
->>>>>>> Stashed changes
 
   if (!student) {
     return (
@@ -88,40 +75,6 @@ function StudentMarksheetPage({ onRouteChange }) {
         </button>
       </div>
 
-<<<<<<< Updated upstream
-      <section className="marksheet-paper printable-paper">
-        <header>
-          <span>Bihar State Madrasa Education Board, Patna</span>
-          <h1>Statement of Marks</h1>
-          <p>
-            {student.className} Examination {student.year}
-          </p>
-        </header>
-
-        <div className="paper-meta-grid">
-          <span>Name: {student.studentName}</span>
-          <span>Father Name: {student.fatherName}</span>
-          <span>Roll No: {student.rollNo}</span>
-          <span>Registration No: {student.registrationNo}</span>
-          <span>District: {student.district}</span>
-          <span>Madrasa: {student.madrasaName}</span>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th>Full Marks</th>
-              <th>Marks Obtained</th>
-            </tr>
-          </thead>
-          <tbody>
-            {student.subjects.map((subject) => (
-              <tr key={subject.name}>
-                <td>{subject.name}</td>
-                <td>{subject.fullMarks}</td>
-                <td>{subject.obtained}</td>
-=======
       <PrintPaper showBackground={showBackground} type="marksheet">
         {/* Absolute positioned MS No to sit on the template's dotted line */}
         <div className="ms-no-overlay">
@@ -218,7 +171,6 @@ function StudentMarksheetPage({ onRouteChange }) {
                 <th className="col-pass">Pass Marks</th>
                 <th className="col-obt">Marks Obtained</th>
                 <th className="col-rem">Remarks</th>
->>>>>>> Stashed changes
               </tr>
             </thead>
             <tbody>
