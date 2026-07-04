@@ -8,6 +8,7 @@ import {
   getYearFromRecord,
   numberToWords,
 } from "../../utils/certificate";
+import { getPublicationDate } from "../../utils/subject";
 import "./StudentMarksheetPage.scss";
 
 function StudentMarksheetPage({ onRouteChange }) {
@@ -326,7 +327,9 @@ function StudentMarksheetPage({ onRouteChange }) {
           <div className="marksheet-footer">
             <div className="footer-date">
               <span className="label">Date of Publication</span>
-              <span className="dots">...................................</span>
+              <span className="value">
+                {formatDate(student.issueDate || getPublicationDate(student.className || student.Class, examYear, "marksheet"))}
+              </span>
             </div>
             <div className="footer-sigs">
               <div className="sig-block">
