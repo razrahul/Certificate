@@ -27,8 +27,17 @@
   }
 
   &.certificate-paper {
-    padding: 18mm 20mm;
-    border: 8px double var(--brand, #0b5e9e);
+    padding: 15mm 16mm;
+
+    &.show-bg {
+      background-image: url('/template_certificate.jpeg');
+      border: none;
+    }
+
+    &.hide-bg {
+      background-image: none;
+      border: 1px solid #c8d5df;
+    }
   }
 
   @media print {
@@ -54,9 +63,14 @@
     }
 
     &.certificate-paper {
-      border: 8px double var(--brand, #0b5e9e) !important;
+      &.show-bg {
+        background-image: url('/template_certificate.jpeg') !important;
+        background-size: 100% 100% !important;
+      }
       &.hide-bg {
+        background-image: none !important;
         background-color: transparent !important;
+        border: none !important;
       }
     }
   }
