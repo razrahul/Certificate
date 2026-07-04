@@ -13,7 +13,7 @@ const firstValue = (record, keys) => {
 
 const normalizeCertificateRecord = (record, filters) => ({
   ...record,
-  className: firstValue(record, ['className', 'standard', 'Standard']) || filters.standard,
+  className: firstValue(record, ['className', 'Class', 'class', 'standard', 'Standard']) || filters.standard,
   category: firstValue(record, ['category', 'Cat']),
   centre: firstValue(record, ['centre', 'Centre']),
   district: firstValue(record, ['district', 'District']) || filters.district,
@@ -28,7 +28,7 @@ const normalizeCertificateRecord = (record, filters) => ({
   registrationNo: firstValue(record, ['registrationNo', 'Rgn', 'RegNo', 'RegistrationNo']),
   rollNo: firstValue(record, ['rollNo', 'RollNo', 'Roll']),
   sex: firstValue(record, ['sex', 'Sex']),
-  standard: firstValue(record, ['standard', 'Standard']) || filters.standard,
+  standard: firstValue(record, ['standard', 'Standard', 'Class', 'class']) || filters.standard,
   studentName: firstValue(record, ['studentName', 'Name', 'StudentName', 'student_name']),
   year: firstValue(record, ['year', 'Year']) || filters.year,
 })
