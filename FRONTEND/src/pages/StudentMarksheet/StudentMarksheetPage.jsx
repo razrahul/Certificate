@@ -141,15 +141,12 @@ function StudentMarksheetPage({ onRouteChange }) {
                 </span>
               </div>
             </div>
-            <div className="info-row">
-              <div className="info-cell full-width">
+            <div className="info-row madrasa-row">
+              <div className="info-cell full-width madrasa-cell">
                 <span className="label">NAME OF MADRASA</span>
                 <span className="dots">:</span>
                 <span className="value">
-                  {student.madrasaName ||
-                    student.NomMad ||
-                    student.Madrasa ||
-                    ""}
+                  {student.madrasaName || student.Madrasa || student.NomMad || ""}
                 </span>
               </div>
             </div>
