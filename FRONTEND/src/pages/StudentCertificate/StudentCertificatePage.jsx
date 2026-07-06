@@ -187,7 +187,7 @@ function StudentCertificatePage({ onRouteChange }) {
             <div className="cert-line-row madrasa-name-row">
               <div className="dotted-line-fill full-width-line">
                 <span className="faq-value madrasa-value">
-                  {student.madrasaName || student.NomMad || student.Madrasa || ""}
+                  {student.madrasaName || student.Madrasa || student.NomMad || ""}
                 </span>
               </div>
             </div>

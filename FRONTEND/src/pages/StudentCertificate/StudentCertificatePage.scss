@@ -320,12 +320,28 @@
 
     /* Row 8 Madrasa single line */
     &.madrasa-name-row {
+      height: 24.4mm;
+      width: 100%;
+      align-items: flex-start;
+      box-sizing: border-box;
+      padding-top: 3.5mm;
+
       .dotted-line-fill {
         margin-left: 0;
+        border-bottom: none;
+        height: 100%;
+        align-items: flex-start;
       }
 
       .madrasa-value {
         text-align: left;
+        white-space: normal;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
     }
 
@@ -336,7 +352,7 @@
       align-items: flex-start;
       justify-content: flex-start;
       gap: 6px;
-      margin-top: 15mm; // Downward gap from Madrasa Name row
+      // margin-top: 15mm; // Downward gap from Madrasa Name row
       width: 100%;
       box-sizing: border-box;
 
