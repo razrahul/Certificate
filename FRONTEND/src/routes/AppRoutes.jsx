@@ -9,6 +9,9 @@ import LoginPage from '../pages/Login/LoginPage'
 import StudentCertificatePage from '../pages/StudentCertificate/StudentCertificatePage'
 import StudentDetailsPage from '../pages/StudentDeatils/StudentDetailsPage'
 import StudentMarksheetPage from '../pages/StudentMarksheet/StudentMarksheetPage'
+import StudentMoulviIslamiatCommerceMarksheetPage from '../pages/Moulvi/StudentMoulviIslamiatCommerceMarksheetPage'
+import StudentMoulviScienceArtsMarksheetPage from '../pages/Moulvi/StudentMoulviScienceArtsMarksheetPage'
+import StudentMoulviCertificatePage from '../pages/Moulvi/StudentMoulviCertificatePage'
 import { logoutUser } from '../redux/reducer/userSlice'
 import { selectActiveStudent } from '../redux/reducer/certificateSlice.js'
 import { hiddenRoutes, pathToRouteId, routes } from './routeConfig'
@@ -57,7 +60,26 @@ function AppRoutes() {
     handleRouteChange('home')
   }
 
-  const CurrentPage = pageMap[activeRoute] || HomePage
+  let CurrentPage = pageMap[activeRoute] || HomePage
+
+  if (activeRoute === 'studentMarksheet' && activeStudent) {
+    const className = String(activeStudent.className || activeStudent.Class || '').toLowerCase()
+    if (className.includes('moulvi')) {
+      const stream = String(activeStudent.Stream || '').toUpperCase().trim();
+      if (stream.includes('SCIENCE') || stream.includes('ARTS')) {
+        CurrentPage = StudentMoulviScienceArtsMarksheetPage
+      } else {
+        CurrentPage = StudentMoulviIslamiatCommerceMarksheetPage
+      }
+    }
+  }
+
+  if (activeRoute === 'studentCertificate' && activeStudent) {
+    const className = String(activeStudent.className || activeStudent.Class || '').toLowerCase()
+    if (className.includes('moulvi')) {
+      CurrentPage = StudentMoulviCertificatePage
+    }
+  }
 
   return (
     <AppShell
