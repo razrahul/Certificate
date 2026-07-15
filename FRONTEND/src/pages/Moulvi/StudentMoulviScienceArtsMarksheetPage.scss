@@ -236,22 +236,22 @@
       font-weight: 600;
       // text-transform: uppercase;
       text-align: center;
-      height: 28px;
+      height: 20px;
     }
 
     .col-sub {
-      width: 32%;
+      width: 36%;
       padding: 4px 10px;
       text-align: left;
     }
 
     .col-full {
-      width: 11%;
+      width: 9%;
       text-align: center;
     }
 
     .col-pass {
-      width: 11%;
+      width: 9%;
       text-align: center;
     }
 
@@ -261,8 +261,8 @@
 
     .sub-th {
       width: 9%;
-      font-size: 11.5px;
-      padding: 2px 4px;
+      font-size: 14px;
+      // padding: 2px 4px;
     }
 
     .col-rem {
@@ -403,7 +403,7 @@
 
     .bold-text {
       flex-shrink: 0;
-      margin-right: 8px;
+      margin: 0px 8px;
       font-size: 14px;
       letter-spacing: 0.8px;
       font-weight: 800;
@@ -451,7 +451,7 @@
 
       .value {
         font-family: 'Outfit', 'Inter', sans-serif;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: 600;
         color: #000;
         letter-spacing: 0.8px;

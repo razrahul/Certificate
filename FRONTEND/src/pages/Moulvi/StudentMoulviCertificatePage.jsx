@@ -127,7 +127,7 @@ function StudentMoulviCertificatePage({ onRouteChange }) {
                   ({classInfo.suffixNumber}
                   <sup>{classInfo.suffixText}</sup>)
                 </>
-              )}{" "} {streamName} EXAMINATION
+              )}{" "} <i>{streamName}</i> EXAMINATION
               <span className="year-value-dotted">
                 {student.year || "2026"}
               </span>
