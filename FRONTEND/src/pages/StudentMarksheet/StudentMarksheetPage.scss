@@ -193,11 +193,13 @@
   border: 1.5px solid #000;
 
   th,
-  td {
-    border: 1px solid #000;
-    padding: 4px 8px;
-    vertical-align: middle;
-  }
+    td {
+      border: 1px solid #000;
+      padding: 5.5px 8px; // 4px को बढ़ाकर 6px या 8px करेंगे तो रो की ऊँचाई बढ़ जाएगी
+      // height: 20px; // अथवा यहाँ अपनी पसंद की height (जैसे 32px, 34px) जोड़ दें
+      vertical-align: middle;
+    }
+
 
   td {
     text-align: center;
@@ -207,17 +209,17 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: 700;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     letter-spacing: 0.5px;
     text-align: left;
   }
 
   th {
-    background: #f1f5f9;
+    background: transparent;
     font-family: Arial, sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     text-align: center;
     height: 28px;
   }
@@ -263,7 +265,7 @@
 
   .merged-pass-marks {
     text-align: center;
-    font-weight: 800;
+    font-weight: normal;
   }
 
   .merged-remarks-rules {
@@ -272,10 +274,11 @@
     text-align: center;
     font-size: 11px;
     line-height: 1.4;
-    border-bottom: 1px dotted #000 !important;
+    border-bottom: none !important;
 
     strong {
       display: block;
+      padding: 0px 6px;
       margin-bottom: 6px;
       text-align: center;
       font-size: 14.5px;
@@ -285,18 +288,35 @@
     }
 
     .rule-item {
-      margin-left: 6px;
-      text-align: left;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1.4;
       font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
 
+      .rule-name {
+        width: 84px;
+        text-align: left;
+      }
+
+      .rule-dash {
+        width: 15px;
+        text-align: center;
+      }
+
+      .rule-val {
+        width: 30px;
+        text-align: right;
+      }
     }
   }
 
   .merged-remarks-status {
-    border-top: 1px dotted #000 !important;
-    border-bottom: 1px dotted #000 !important;
+    border-top: none !important;
+    border-bottom: none !important;
     padding: 0;
     vertical-align: stretch;
     height: 100%;
@@ -305,7 +325,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      min-height: 140px;
+      // min-height: 140px;
       align-items: stretch;
 
       .status-row {
@@ -313,12 +333,12 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: 12px 10px;
+        padding: 9px 10px;
         text-align: center;
 
-        &.border-top-dash {
-          border-top: 1px dashed #000;
-        }
+        // &.border-top-dash {
+        //   border-top: 1px dashed #000;
+        // }
 
         .status-label {
           font-size: 14px;
@@ -340,24 +360,39 @@
 
   .aggregate-row {
     td:last-child {
-      border-top: 1px dotted #000 !important;
+      border-top: none !important;
     }
   }
 
   // Science cell split formatting
+  .science-row {
+    td {
+      height: 32px !important;
+      padding-top: 2px !important;
+      padding-bottom: 2px !important;
+    }
+
+    td.sci-cell {
+      padding: 0 !important;
+      height: 32px !important;
+    }
+  }
+
   .sci-cell {
     padding: 0 !important;
   }
 
   .sci-split {
     text-align: center;
-    padding: 4px 8px;
+    padding: 0px 8px;
     font-weight: 600;
+    line-height: 1.1;
   }
 
   .sci-total {
     text-align: center;
-    padding: 4px 8px;
+    padding: 0px 8px;
+    line-height: 1.1;
   }
 
   .border-top-solid {

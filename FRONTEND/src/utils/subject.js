@@ -398,6 +398,10 @@ export const getMoulviSubjects = (student) => {
     optional.push(langSub);
   }
 
+  // Sort compulsory and optional arrays using getSubjectOrderIndex to guarantee exact layout order
+  compulsory.sort((a, b) => getSubjectOrderIndex(a.name) - getSubjectOrderIndex(b.name));
+  optional.sort((a, b) => getSubjectOrderIndex(a.name) - getSubjectOrderIndex(b.name));
+
   return { compulsory, optional };
 };
 
@@ -424,28 +428,28 @@ export const SUBJECT_ORDER = [
 export const getSubjectOrderIndex = (name) => {
   if (!name) return 999;
   const upper = name.trim().toUpperCase();
-  if (upper === "ENGLISH/HINDI/PERSIAN") return 1000; // Always absolute last!
+  if (upper === "ENGLISH" || upper === "HINDI" || upper === "PERSIAN" || upper === "ENGLISH/HINDI/PERSIAN") {
+    return 1000; // Always absolute last!
+  }
   
-  const idx = SUBJECT_ORDER.findIndex(sub => upper.includes(sub));
+  const idx = SUBJECT_ORDER.findIndex(sub => {
+    if (sub === "ECONOMICS/ENTREPRENEURSHIP") {
+      return upper.includes("ECON") || upper.includes("ENTR");
+    }
+    return upper.includes(sub);
+  });
   return idx !== -1 ? idx : 500; // Custom subjects sort before language options
 };
 
 export const getSubjectDisplayName = (name) => {
   if (!name) return "";
-  const upper = name.trim().toUpperCase();
-  if (upper === "HINDI" || upper === "ENGLISH" || upper === "PERSIAN" || upper === "ENGLISH/HINDI/PERSIAN") {
-    return "ENGLISH/HINDI/PERSIAN";
-  }
-  if (upper === "ECONOMICS" || upper === "ENTREPRENEURSHIP" || upper === "ECONOMICS/ENTREPRENEURSHIP" || upper.includes("ECON") || upper.includes("ENTR")) {
-    return "ECONOMICS/ENTREPRENEURSHIP";
-  }
-  return name;
+  return name.trim().toUpperCase();
 };
 
 export const getMoulviSubjectConfig = (name) => {
   if (!name) return { type: "simple", fullTotal: 100, passTotal: 30 };
   const upper = name.trim().toUpperCase();
-  const practicalSubjects = ["PHYSICS", "CHEMISTRY", "BIOLOGY", "GEOGRAPHY", "PSYCHOLOGY", "HOME SCIENCE"];
+  const practicalSubjects = ["PHYSICS", "CHEMISTRY", "BIOLOGY", "PSYCHOLOGY", "HOME SCIENCE"];
   const isPractical = practicalSubjects.some(sub => upper.includes(sub));
 
   if (isPractical) {

@@ -184,10 +184,26 @@ function StudentMarksheetPage({ onRouteChange }) {
                 <td rowSpan="6" className="merged-remarks-rules">
                   <div className="rules-content">
                     <strong>MINIMUM MARKS FOR</strong>
-                    <div className="rule-item">Distinction - 750</div>
-                    <div className="rule-item">First Div - 600</div>
-                    <div className="rule-item">Second Div - 450</div>
-                    <div className="rule-item">Third Div - 309</div>
+                    <div className="rule-item">
+                      <span className="rule-name">Distinction</span>
+                      <span className="rule-dash">-</span>
+                      <span className="rule-val">750</span>
+                    </div>
+                    <div className="rule-item">
+                      <span className="rule-name">First Div</span>
+                      <span className="rule-dash">-</span>
+                      <span className="rule-val">600</span>
+                    </div>
+                    <div className="rule-item">
+                      <span className="rule-name">Second Div</span>
+                      <span className="rule-dash">-</span>
+                      <span className="rule-val">450</span>
+                    </div>
+                    <div className="rule-item">
+                      <span className="rule-name">Third Div</span>
+                      <span className="rule-dash">-</span>
+                      <span className="rule-val">309</span>
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -242,9 +258,9 @@ function StudentMarksheetPage({ onRouteChange }) {
                   <div className="status-container">
                     <div className="status-row">
                       <div className="status-label">Remarks</div>
-                      <div className="status-val">
+                      {/* <div className="status-val">
                         {student.Grace ? `GRACE ${student.Grace}` : ""}
-                      </div>
+                      </div> */}
                     </div>
                     <div className="status-row border-top-dash">
                       <div className="status-label">Result</div>
@@ -285,7 +301,7 @@ function StudentMarksheetPage({ onRouteChange }) {
               </tr>
 
               {/* SCIENCE */}
-              <tr>
+              <tr className="science-row">
                 <td>SCIENCE (Theory+Practical)</td>
                 <td className="sci-cell">
                   <div className="sci-split">80+20</div>

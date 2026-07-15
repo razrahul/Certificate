@@ -87,9 +87,7 @@ function StudentMoulviScienceArtsMarksheetPage({ onRouteChange }) {
   const distinctionThreshold = Math.round(totalFullMarks * 0.75);
   const firstDivThreshold = Math.round(totalFullMarks * 0.6);
   const secondDivThreshold = Math.round(totalFullMarks * 0.45);
-  const thirdDivThreshold = streamName.includes("SCIENCE")
-    ? 252
-    : Math.round(totalFullMarks * 0.33);
+  const thirdDivThreshold = totalPassMarks;
 
   const compulsoryRows = [];
 
@@ -111,7 +109,7 @@ function StudentMoulviScienceArtsMarksheetPage({ onRouteChange }) {
       passTotal: has3Papers ? 99 : 66,
     },
     obt: {
-      theory: "",
+      theory: diniyatSub.total,
       practical: "",
       total: diniyatSub.total,
       grace: diniyatSub.grace,
@@ -156,6 +154,44 @@ function StudentMoulviScienceArtsMarksheetPage({ onRouteChange }) {
       type: "subject",
       isPlaceholder: sub.isPlaceholder,
     });
+  });
+
+  // Calculate total theory and total practical
+  let totalTheory = 0;
+  let totalPractical = 0;
+
+  const safeNum = (val) => {
+    if (
+      !val ||
+      val === "AB" ||
+      val === "Ab" ||
+      String(val).trim() === "." ||
+      String(val).trim() === ""
+    )
+      return 0;
+    return Number(val);
+  };
+
+  compulsoryRows.forEach((row) => {
+    if (row.type === "diniyat-paper") return; // Skip individual papers, count Diniyat Total instead!
+    const isComposite = row.config.type === "composite";
+    if (isComposite) {
+      totalTheory += safeNum(row.obt.theory);
+      totalPractical += safeNum(row.obt.practical);
+    } else {
+      totalTheory += safeNum(row.obt.theory);
+    }
+  });
+
+  optionalRows.forEach((row) => {
+    if (row.isPlaceholder) return;
+    const isComposite = row.config.type === "composite";
+    if (isComposite) {
+      totalTheory += safeNum(row.obt.theory);
+      totalPractical += safeNum(row.obt.practical);
+    } else {
+      totalTheory += safeNum(row.obt.theory);
+    }
   });
 
   // Row spans logic
@@ -395,16 +431,17 @@ function StudentMoulviScienceArtsMarksheetPage({ onRouteChange }) {
                     </td>
 
                     {/* Dynamic Diniyat Pass Marks Spanning */}
-                    {row.type === "diniyat-paper" ||
-                    row.type === "diniyat-total" ? (
-                      row.type === "diniyat-paper" && idx === 0 ? (
+                    {row.type === "diniyat-paper" ? (
+                      idx === 0 ? (
                         <td
-                          rowSpan={diniyatPapers.length + 1}
-                          className="merged-pass-marks bold-text"
+                          rowSpan={diniyatPapers.length}
+                          className="merged-pass-marks"
                         >
                           {has3Papers ? 99 : 66}
                         </td>
                       ) : null
+                    ) : row.type === "diniyat-total" ? (
+                      <td className="bold-text">{has3Papers ? 99 : 66}</td>
                     ) : (
                       <td>
                         {isComposite
@@ -421,7 +458,7 @@ function StudentMoulviScienceArtsMarksheetPage({ onRouteChange }) {
                     </td>
 
                     {/* Obtained: Practical */}
-                    <td>{isComposite ? row.obt.practical || "0" : "-"}</td>
+                    <td>{isComposite ? row.obt.practical || "0" : ""}</td>
 
                     {/* Obtained: Total */}
                     <td className="bold-text">
@@ -489,7 +526,7 @@ function StudentMoulviScienceArtsMarksheetPage({ onRouteChange }) {
                         ? ""
                         : isComposite
                           ? row.obt.practical || "0"
-                          : "-"}
+                          : ""}
                     </td>
 
                     {/* Obtained: Total */}
@@ -513,9 +550,9 @@ function StudentMoulviScienceArtsMarksheetPage({ onRouteChange }) {
                 <td className="bold-text">AGGREGATE</td>
                 <td className="bold-text">{totalFullMarks}</td>
                 <td className="bold-text">{totalPassMarks}</td>
-                <td colSpan="3" className="bold-text center-text">
-                  {totMs || "0"}
-                </td>
+                <td className="bold-text">{totalTheory || "0"}</td>
+                <td className="bold-text">{totalPractical || "0"}</td>
+                <td className="bold-text">{totMs || "0"}</td>
                 {getRightColumnCell(
                   compulsoryRows.length + 2 + optionalRows.length,
                   true,
