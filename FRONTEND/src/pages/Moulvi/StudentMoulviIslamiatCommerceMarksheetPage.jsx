@@ -246,7 +246,7 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
                 <sup>{classInfo.suffixText}</sup>)
               </>
             )}{" "}
-            {streamName} EXAMINATION {examYear}
+            <i>{streamName}</i> EXAMINATION {examYear}
           </h2>
 
           <div className="moulvi-student-info-section">

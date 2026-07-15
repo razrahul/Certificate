@@ -193,15 +193,13 @@
   border: 1.5px solid #000;
 
   th,
-    td {
-      border: 1px solid #000;
-      padding: 5.5px 8px; // 4px को बढ़ाकर 6px या 8px करेंगे तो रो की ऊँचाई बढ़ जाएगी
-      // height: 20px; // अथवा यहाँ अपनी पसंद की height (जैसे 32px, 34px) जोड़ दें
-      vertical-align: middle;
-    }
-
+  td {
+    border: 1px solid #000;
+    vertical-align: middle;
+  }
 
   td {
+    padding: 5.5px 8px;
     text-align: center;
   }
 
@@ -221,7 +219,8 @@
     font-weight: 600;
     // text-transform: uppercase;
     text-align: center;
-    height: 28px;
+    height: 20.5px;
+    padding: 0 8px;
   }
 
   // Column widths based on designer measurements (Total width = 16cm)
@@ -409,7 +408,7 @@
 
   .bold-text {
     flex-shrink: 0;
-    margin-right: 8px;
+    margin: 0px 8px;
     font-size: 14px;
     letter-spacing: 0.8px;
     font-weight: 800;
@@ -426,7 +425,8 @@
 
 .marksheet-footer {
   position: absolute;
-  bottom: 1mm;
+  margin: 0px 12px;
+  bottom: 4mm;
   left: 0;
   right: 0;
   display: flex;
@@ -435,7 +435,7 @@
   page-break-inside: avoid;
   break-inside: avoid;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.8px;
   color: #000;
 
@@ -456,7 +456,7 @@
     .value {
       font-family: 'Outfit', 'Inter', sans-serif;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
       color: #000;
       letter-spacing: 0.8px;
     }
@@ -467,18 +467,19 @@
     display: flex;
     justify-content: space-between;
     width: 460px;
+    padding-left: 40px;
 
     .sig-block {
       text-align: center;
-      width: 80px;
-      padding-top: 4px;
+      // width: 80px;
+      // padding-top: 4px;
 
       span {
         font-family: 'Outfit', 'Inter', sans-serif;
         font-size: 14px;
         font-weight: 700;
         color: #000;
-        text-transform: uppercase;
+        // text-transform: uppercase;
         letter-spacing: 0.8px;
       }
     }
