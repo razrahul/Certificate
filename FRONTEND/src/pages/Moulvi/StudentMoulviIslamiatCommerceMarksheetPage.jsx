@@ -81,9 +81,7 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
   const distinctionThreshold = Math.round(totalFullMarks * 0.75);
   const firstDivThreshold = Math.round(totalFullMarks * 0.6);
   const secondDivThreshold = Math.round(totalFullMarks * 0.45);
-  const thirdDivThreshold = streamName.includes("ISLAMIYAT")
-    ? 249
-    : Math.round(totalFullMarks * 0.33);
+  const thirdDivThreshold = totalPassMarks;
 
   const compulsoryRows = [];
 
@@ -133,32 +131,81 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
   });
 
   // Row spans logic
-  const rulesRowSpan = has3Papers ? 6 : 5;
+  const rulesRowSpan = 5;
 
   const getRightColumnCell = (overallIdx, isAggregate = false) => {
-    const startIdx = has3Papers ? 6 : 5;
+    const startIdx = 5;
     if (overallIdx < startIdx) return null; // spanned by rules
-    if (overallIdx === startIdx) {
-      return <td className="status-label-cell font-bold remarks-label-cell">Remarks</td>;
-    }
-    // if (overallIdx === startIdx + 1) {
-    //   return (
-    //     <td className="status-value-cell remarks-val-cell">
-    //       {student.Grace && student.Grace !== "." ? `GRACE ${student.Grace}` : "NIL"}
-    //     </td>
-    //   );
-    // }
-    if (overallIdx === startIdx + 2) {
-      return <td className="status-label-cell font-bold result-label-cell">Result</td>;
-    }
-    if (overallIdx === startIdx + 3) {
-      return <td className="status-value-cell bold-text result-val-cell">{resultStatus}</td>;
-    }
+
     if (isAggregate) {
-      return <td className="status-value-cell bold-text division-val-cell">{divisionStatus}</td>;
+      return (
+        <td className="status-value-cell bold-text division-val-cell">
+          {divisionStatus}
+        </td>
+      );
     }
-    if (overallIdx === startIdx + 4) {
-      return <td className="status-label-cell font-bold division-label-cell">Division</td>;
+
+
+    if (has3Papers) {
+      // Islamiat layout (10 rows total, aggregate at row 10)
+      if (overallIdx === 5) {
+        return (
+          <td className="status-label-cell font-bold remarks-label-cell">
+            Remarks
+          </td>
+        );
+      }
+      if (overallIdx === 7) {
+        return (
+          <td className="status-label-cell font-bold result-label-cell">
+            Result
+          </td>
+        );
+      }
+      if (overallIdx === 8) {
+        return (
+          <td className="status-value-cell bold-text result-val-cell">
+            {resultStatus}
+          </td>
+        );
+      }
+      if (overallIdx === 10) {
+        return (
+          <td className="status-label-cell font-bold division-label-cell">
+            Division
+          </td>
+        );
+      }
+    } else {
+      // Commerce layout (11 rows total, aggregate at row 11)
+      if (overallIdx === 5) {
+        return (
+          <td className="status-label-cell font-bold remarks-label-cell">
+            Remarks
+          </td>
+        );
+      }
+      if (overallIdx === 7) {
+        return (
+          <td className="status-label-cell font-bold result-label-cell">
+            Result
+          </td>
+        );
+      }
+      if (overallIdx === 8) {
+        return (
+          <td className="status-value-cell bold-text result-val-cell">
+            {resultStatus}
+          </td>
+        );
+      }
+      if (overallIdx === 10) {
+        return (
+          <td className="status-label-cell font-bold division-label-cell">
+            Division
+          </td>
+        );
+      }
     }
     return <td className="status-empty-cell"></td>;
   };
@@ -217,7 +264,10 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
                 <span className="label">FATHER'S NAME</span>
                 <span className="dots">:</span>
                 <span className="value">
-                  {student.fatherName || student.Father || student.FatherName || ""}
+                  {student.fatherName ||
+                    student.Father ||
+                    student.FatherName ||
+                    ""}
                 </span>
               </div>
             </div>
@@ -226,7 +276,10 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
                 <span className="label">MOTHER'S NAME</span>
                 <span className="dots">:</span>
                 <span className="value">
-                  {student.motherName || student.Mother || student.MotherName || ""}
+                  {student.motherName ||
+                    student.Mother ||
+                    student.MotherName ||
+                    ""}
                 </span>
               </div>
             </div>
@@ -235,7 +288,11 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
                 <span className="label">REGISTRATION NO.</span>
                 <span className="dots">:</span>
                 <span className="value">
-                  {student.registrationNo || student.Rgn || student.regNo || student.RegNo || ""}
+                  {student.registrationNo ||
+                    student.Rgn ||
+                    student.regNo ||
+                    student.RegNo ||
+                    ""}
                 </span>
               </div>
               <div className="info-cell">
@@ -315,15 +372,17 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
                     <td>{row.full}</td>
 
                     {/* Dynamic Diniyat Pass Marks Spanning */}
-                    {(row.type === "diniyat-paper" || row.type === "diniyat-total") ? (
-                      row.type === "diniyat-paper" && idx === 0 ? (
+                    {row.type === "diniyat-paper" ? (
+                      idx === 0 ? (
                         <td
-                          rowSpan={diniyatPapers.length + 1}
-                          className="merged-pass-marks bold-text"
+                          rowSpan={diniyatPapers.length}
+                          className="merged-pass-marks"
                         >
                           {has3Papers ? 99 : 66}
                         </td>
                       ) : null
+                    ) : row.type === "diniyat-total" ? (
+                      <td className="bold-text">{row.pass}</td>
                     ) : (
                       <td>{row.pass}</td>
                     )}
@@ -378,8 +437,11 @@ function StudentMoulviIslamiatCommerceMarksheetPage({ onRouteChange }) {
                 <td className="bold-text">{totalFullMarks}</td>
                 <td className="bold-text">{totalPassMarks}</td>
                 <td className="bold-text center-text">{totMs || "0"}</td>
-                
-                {getRightColumnCell(compulsoryRows.length + 2 + optionalRows.length, true)}
+
+                {getRightColumnCell(
+                  compulsoryRows.length + 2 + optionalRows.length,
+                  true,
+                )}
               </tr>
             </tbody>
           </table>

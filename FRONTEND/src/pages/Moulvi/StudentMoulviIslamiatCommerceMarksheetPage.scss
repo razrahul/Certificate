@@ -89,7 +89,7 @@
 
   .moulvi-exam-title {
     text-align: center;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     margin: 0 0 18px 0;
     text-decoration: none;
@@ -103,7 +103,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
 
     .info-row {
       display: flex;
@@ -223,23 +223,25 @@
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-size: 14px;
       font-weight: 700;
-      text-transform: uppercase;
+      // text-transform: uppercase;
       letter-spacing: 0.5px;
       text-align: left;
+      padding-left: 5px;
     }
 
     th {
-      background: #f1f5f9;
+      background: transparent;
       font-family: Arial, sans-serif;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
-      text-transform: uppercase;
+      // text-transform: uppercase;
       text-align: center;
       height: 28px;
     }
 
     .col-sub {
       width: 38.125%;
+      padding: 4px 10px;
       text-align: left;
     }
 
@@ -272,7 +274,7 @@
     }
 
     .section-header-row {
-      background: #f8fafc;
+      background: transparent;
 
       td.section-title {
         font-family: Arial, sans-serif;
@@ -293,7 +295,7 @@
       text-align: center;
       font-size: 10px;
       line-height: 1.2;
-      border-bottom: 1px dotted #000 !important;
+      border-bottom: none !important;
 
       strong {
         padding: 6px 6px;
@@ -335,7 +337,7 @@
 
     .merged-pass-marks {
       text-align: center;
-      font-weight: 800;
+      font-weight: normal;
     }
 
     .merged-remarks-status {
@@ -416,8 +418,8 @@
     position: absolute;
     margin: 0px 12px;
     bottom: 4mm;
-    // left: 2mm;
-    // right: 2mm;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -433,6 +435,7 @@
       flex-direction: column;
       align-items: center;
       gap: 4px;
+      white-space: nowrap;
 
       .label {
         font-family: 'Outfit', 'Inter', sans-serif;
