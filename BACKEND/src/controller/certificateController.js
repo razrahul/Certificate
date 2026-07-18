@@ -17,23 +17,25 @@ export const searchCertificateTR = async (req, res) => {
     return res.status(400).json({ message: "Invalid standard and year" });
   }
 
-  if (standard.toLowerCase() === "fauquania") {
+
+  const stdLower = standard.toLowerCase();
+  if (stdLower.startsWith("fauquania") || stdLower.startsWith("moulvi") || stdLower.startsWith("wastania")) {
     try {
-      const fauquania = await fauquaniaServices.getfauquaniaTR(
+      const record = await fauquaniaServices.getfauquaniaTR(
         tableName,
         district,
         searchBy,
         searchValue,  
       );
 
-      if (!fauquania || fauquania.length === 0) {
+      if (!record || record.length === 0) {
         return res.status(404).json({ 
           message: "Certificate record not found" });
       }
       return res.status(200).json({
         status: "success",
         message: "Certificate record fetched successfully",
-        data: fauquania[0] || null,
+        data: record[0] || null,
       });
     } catch (error) {
       return res.status(500).json({ message: error.message });
