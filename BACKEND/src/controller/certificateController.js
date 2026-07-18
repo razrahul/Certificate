@@ -1,46 +1,53 @@
 import contex from "../utils/contex.js";
 import fauquaniaServices from "../services/fauquaniaServices.js";
-
+import { sendSuccessResponse, sendErrorResponse } from "../utils/response.js";
 
 export const searchCertificateTR = async (req, res) => {
   const { year, standard, district, searchBy, searchValue } = req.body;
 
   if (!year || !standard || !district || !searchBy || !searchValue) {
-    return res.status(400).json({
-      message: "Year, standard, district, searchBy and searchValue are required",
-    });
+    return sendErrorResponse(
+      res,
+      "Year, standard, district, searchBy and searchValue are required",
+      {},
+      400
+    );
   }
 
   const tableName = contex.getTableNameCertficatefromBody(year, standard);
 
   if (!tableName) {
-    return res.status(400).json({ message: "Invalid standard and year" });
+    return sendErrorResponse(res, "Invalid standard and year", {}, 400);
   }
 
-
   const stdLower = standard.toLowerCase();
-  if (stdLower.startsWith("fauquania") || stdLower.startsWith("moulvi") || stdLower.startsWith("wastania")) {
+  if (
+    stdLower.startsWith("fauquania") ||
+    stdLower.startsWith("moulvi") ||
+    stdLower.startsWith("wastania")
+  ) {
     try {
       const record = await fauquaniaServices.getfauquaniaTR(
         tableName,
         district,
         searchBy,
-        searchValue,  
+        searchValue
       );
 
       if (!record || record.length === 0) {
-        return res.status(404).json({ 
-          message: "Certificate record not found" });
+        return sendErrorResponse(res, "Certificate record not found", {}, 404);
       }
-      return res.status(200).json({
-        status: "success",
-        message: "Certificate record fetched successfully",
-        data: record[0] || null,
-      });
+      
+      return sendSuccessResponse(
+        res,
+        "Certificate record fetched successfully",
+        record[0] || null,
+        200
+      );
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      return sendErrorResponse(res, error.message, {}, 500);
     }
   }
 
-  return res.status(400).json({ message: "Unsupported standard" });
+  return sendErrorResponse(res, "Unsupported standard", {}, 400);
 };
