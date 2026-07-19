@@ -1,18 +1,9 @@
 import contex from "../utils/contex.js";
-import fauquaniaServices from "../services/fauquaniaServices.js";
+import certificateServices from "../services/certificateServices.js";
 import { sendSuccessResponse, sendErrorResponse } from "../utils/response.js";
 
 export const searchCertificateTR = async (req, res) => {
   const { year, standard, district, searchBy, searchValue } = req.body;
-
-  if (!year || !standard || !district || !searchBy || !searchValue) {
-    return sendErrorResponse(
-      res,
-      "Year, standard, district, searchBy and searchValue are required",
-      {},
-      400
-    );
-  }
 
   const tableName = contex.getTableNameCertficatefromBody(year, standard);
 
@@ -27,7 +18,7 @@ export const searchCertificateTR = async (req, res) => {
     stdLower.startsWith("wastania")
   ) {
     try {
-      const record = await fauquaniaServices.getfauquaniaTR(
+      const record = await certificateServices.getcertificateTR(
         tableName,
         district,
         searchBy,
@@ -42,6 +33,115 @@ export const searchCertificateTR = async (req, res) => {
         res,
         "Certificate record fetched successfully",
         record[0] || null,
+        200
+      );
+    } catch (error) {
+      return sendErrorResponse(res, error.message, {}, 500);
+    }
+  }
+
+  return sendErrorResponse(res, "Unsupported standard", {}, 400);
+};
+
+export const updateCertificateTR = async (req, res) => {
+  const { 
+    year, 
+    standard, 
+    district, 
+    searchBy, 
+    searchValue, 
+    Name, 
+    Father, 
+    Mother, 
+    Madrasa, 
+    DOB 
+  } = req.body;
+
+  const tableName = contex.getTableNameCertficatefromBody(year, standard);
+
+  if (!tableName) {
+    return sendErrorResponse(res, "Invalid standard and year", {}, 400);
+  }
+
+  // Build the updates object dynamically (only include fields that are passed)
+  const updateFields = {};
+  if (Name !== undefined) updateFields.Name = Name;
+  if (Father !== undefined) updateFields.Father = Father;
+  if (Mother !== undefined) updateFields.Mother = Mother;
+  if (Madrasa !== undefined) updateFields.Madrasa = Madrasa;
+  if (DOB !== undefined) updateFields.DOB = DOB;
+
+  const stdLower = standard.toLowerCase();
+  if (
+    stdLower.startsWith("fauquania") ||
+    stdLower.startsWith("moulvi") ||
+    stdLower.startsWith("wastania")
+  ) {
+    try {
+      // First, check if the record exists and retrieve current values
+      const existingRecords = await certificateServices.getcertificateTR(
+        tableName,
+        district,
+        searchBy,
+        searchValue
+      );
+
+      if (!existingRecords || existingRecords.length === 0) {
+        return sendErrorResponse(res, "Certificate record not found", {}, 404);
+      }
+
+      const existingRecord = existingRecords[0];
+
+      // Compare updateFields against current database values
+      const actualUpdates = {};
+      let hasChanges = false;
+
+      if (Name !== undefined && Name !== existingRecord.Name) {
+        actualUpdates.Name = Name;
+        hasChanges = true;
+      }
+      if (Father !== undefined && Father !== existingRecord.Father) {
+        actualUpdates.Father = Father;
+        hasChanges = true;
+      }
+      if (Mother !== undefined && Mother !== existingRecord.Mother) {
+        actualUpdates.Mother = Mother;
+        hasChanges = true;
+      }
+      if (Madrasa !== undefined && Madrasa !== existingRecord.Madrasa) {
+        actualUpdates.Madrasa = Madrasa;
+        hasChanges = true;
+      }
+      if (DOB !== undefined && DOB !== existingRecord.DOB) {
+        actualUpdates.DOB = DOB;
+        hasChanges = true;
+      }
+
+      // If no values are different, return success immediately
+      if (!hasChanges) {
+        return sendSuccessResponse(
+          res,
+          "No changes detected. Record is already up to date.",
+          existingRecord,
+          200
+        );
+      }
+
+      // Execute dynamic update only for the changed fields
+      await certificateServices.updateCertificateTR(
+        tableName,
+        district,
+        searchBy,
+        searchValue,
+        actualUpdates
+      );
+
+      const updatedRecord = { ...existingRecord, ...actualUpdates };
+
+      return sendSuccessResponse(
+        res,
+        "Certificate record updated successfully",
+        updatedRecord,
         200
       );
     } catch (error) {
