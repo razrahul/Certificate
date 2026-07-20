@@ -1,6 +1,7 @@
 import contex from "../utils/contex.js";
 import certificateServices from "../services/certificateServices.js";
 import { sendSuccessResponse, sendErrorResponse } from "../utils/response.js";
+import logServices from "../services/logServices.js";
 
 export const searchCertificateTR = async (req, res) => {
   const { year, standard, district, searchBy, searchValue } = req.body;
@@ -136,6 +137,29 @@ export const updateCertificateTR = async (req, res) => {
         actualUpdates
       );
 
+      // Log the updates to the database
+      const operatorId = req.user.id;
+      const operatorUsername = req.user.username || req.user.email;
+
+      const updatesLogData = {};
+      for (const [field, newVal] of Object.entries(actualUpdates)) {
+        updatesLogData[field] = {
+          old: existingRecord[field] !== null && existingRecord[field] !== undefined ? String(existingRecord[field]) : null,
+          new: newVal !== null && newVal !== undefined ? String(newVal) : null,
+        };
+      }
+
+      await logServices.createUpdateLog({
+        operatorId,
+        operatorUsername,
+        tableName,
+        year,
+        className: standard,
+        certificateId: searchValue,
+        district,
+        updates: updatesLogData,
+      });
+
       const updatedRecord = { ...existingRecord, ...actualUpdates };
 
       return sendSuccessResponse(
@@ -150,4 +174,36 @@ export const updateCertificateTR = async (req, res) => {
   }
 
   return sendErrorResponse(res, "Unsupported standard", {}, 400);
+};
+
+export const logCertificatePrint = async (req, res) => {
+  try {
+    const { year, standard, district, searchBy, searchValue } = req.body;
+
+    if (!year || !standard || !district || !searchBy || !searchValue) {
+      return sendErrorResponse(res, "Identifying fields are required", {}, 400);
+    }
+
+    const tableName = contex.getTableNameCertficatefromBody(year, standard);
+    if (!tableName) {
+      return sendErrorResponse(res, "Invalid standard and year", {}, 400);
+    }
+
+    const operatorId = req.user.id;
+    const operatorUsername = req.user.username || req.user.email;
+
+    const printLog = await logServices.createPrintLog({
+      operatorId,
+      operatorUsername,
+      tableName,
+      year,
+      className: standard,
+      certificateId: searchValue,
+      district,
+    });
+
+    return sendSuccessResponse(res, "Certificate print logged successfully", printLog, 201);
+  } catch (error) {
+    return sendErrorResponse(res, "Error logging certificate print", error.message, 500);
+  }
 };

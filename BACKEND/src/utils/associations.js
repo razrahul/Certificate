@@ -1,4 +1,6 @@
 import User from "../model/user.js";
+import UpdateLog from "../model/updateLog.js";
+import PrintLog from "../model/printLog.js";
 // Import other models here once they are created:
 // import Role from "../model/role.js";
 // import Company from "../model/company.js";
@@ -6,8 +8,14 @@ import User from "../model/user.js";
 // import Contact from "../model/contact.js";
 
 export const setupAssociations = () => {
-  // Define associations here once models are created:
-  
+  // User and UpdateLog (One-to-Many)
+  User.hasMany(UpdateLog, { foreignKey: "operatorId", as: "updateLogs" });
+  UpdateLog.belongsTo(User, { foreignKey: "operatorId", as: "operator" });
+
+  // User and PrintLog (One-to-Many)
+  User.hasMany(PrintLog, { foreignKey: "operatorId", as: "printLogs" });
+  PrintLog.belongsTo(User, { foreignKey: "operatorId", as: "operator" });
+
   // Role and User (One-to-Many)
   // User.belongsTo(Role, { foreignKey: "roleId", targetKey: "uuId", as: "role" });
   // Role.hasMany(User, { foreignKey: "roleId", sourceKey: "uuId", as: "users" });

@@ -1,4 +1,6 @@
 import User from "../model/user.js";
+import UpdateLog from "../model/updateLog.js";
+import PrintLog from "../model/printLog.js";
 // Import other models here once they are created:
 // import Role from "../model/role.js";
 // import Company from "../model/company.js";
@@ -13,10 +15,8 @@ export const tableSync = async () => {
     // await Role.sync({ force: false });
     // await Company.sync({ force: false }); 
     await User.sync({ force: false });
-    // await Chat.sync({ force: false });
-    // await Contact.sync({ force: false });
-    // await ContactLog.sync({ force: false });
-    // await Stats.sync({ force: false });
+    await UpdateLog.sync({ force: false });
+    await PrintLog.sync({ force: false });
     
     if (process.env.NODE_ENV !== "production") {
       console.log("SQL Database tables synchronized successfully.");
