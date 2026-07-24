@@ -311,8 +311,8 @@ function StudentMarksheetPage({ onRouteChange }) {
                   <div className="sci-split">25+8</div>
                   <div className="sci-total border-top-solid">33</div>
                 </td>
-                <td className="sci-cell">
-                  <div className="sci-split">
+                <td className="sci-cell" cent>
+                  <div className="sci-split bold-text">
                     {sct || scp ? `${sct}+${scp}` : "0"}
                   </div>
                   <div className="sci-total border-top-solid bold-text">

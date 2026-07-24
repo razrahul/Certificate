@@ -69,8 +69,8 @@
 
 .ms-no-overlay {
   position: absolute;
-  right: 22mm;
-  top: 15mm;
+  right: 22.5mm;
+  top: 28mm;
   font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -93,15 +93,16 @@
 
 .exam-title {
   text-align: center;
-  font-size: 18px;
+  font-size: 21.5px;
   font-weight: 700;
   margin: 0 0 18px 0;
   text-decoration: none;
-  letter-spacing: 1.4px;
+  letter-spacing: 0.25px;
   text-transform: uppercase;
   color: #0b5e9e;
   display: block;
-  padding-bottom: 3px;
+  // padding-bottom: 3px;
+  white-space: nowrap;
 
   sup {
     text-transform: none;
@@ -256,10 +257,11 @@
 
   .center-text {
     text-align: center;
+    font-weight: 700;
   }
 
   .bold-text {
-    font-weight: 800;
+    font-weight: 700;
   }
 
   .merged-pass-marks {
@@ -350,7 +352,7 @@
 
         .status-val {
           font-size: 12.5px;
-          font-weight: 800;
+          font-weight: 700;
           text-transform: uppercase;
         }
       }
@@ -384,8 +386,12 @@
   .sci-split {
     text-align: center;
     padding: 0px 8px;
-    font-weight: 600;
+    // font-weight: 600;
     line-height: 1.1;
+
+    &.bold-text {
+      font-weight: 700;
+    }
   }
 
   .sci-total {
@@ -411,7 +417,7 @@
     margin: 0px 8px;
     font-size: 14px;
     letter-spacing: 0.8px;
-    font-weight: 800;
+    font-weight: 700;
   }
 
   .words-value {
@@ -426,7 +432,7 @@
 .marksheet-footer {
   position: absolute;
   margin: 0px 12px;
-  bottom: 4mm;
+  bottom: 10mm;
   left: 0;
   right: 0;
   display: flex;
@@ -444,6 +450,7 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
+    white-space: nowrap;
 
     .label {
       font-family: 'Outfit', 'Inter', sans-serif;
