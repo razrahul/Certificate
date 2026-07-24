@@ -84,8 +84,8 @@
   /* Certificate Number top right overlay */
   .cert-no-overlay {
     position: absolute;
-    top: 20mm;
-    right: 16mm;
+    top: 26mm;
+    right: 22.5mm;
     display: flex;
     align-items: flex-end;
     width: 42mm;
@@ -128,7 +128,7 @@
     .cert-urdu-title {
       font-family: "Jameel Noori Nastaleeq", "Noto Nastaliq Urdu", "Alvi Lahori Nastaleeq", serif;
       font-size: 28px;
-      letter-spacing: 0.2px;
+      letter-spacing: 1.2px;
       font-weight: 600;
       color: #000;
       // margin-bottom: 2mm;
@@ -141,12 +141,13 @@
 
     .cert-title {
       font-family: "Georgia", Times, serif;
-      font-size: 18px;
+      font-size: 19.7px;
       font-weight: bold;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.2px;
       text-transform: uppercase;
       margin: 0;
       color: #000;
+      white-space: nowrap;
 
       sup {
         text-transform: none;
@@ -154,7 +155,7 @@
 
       .year-value-dotted {
         font-family: "Arial", sans-serif;
-        font-size: 18px;
+        font-size: 19.7px;
         letter-spacing: 0.8px;
         // border-bottom: 1px dotted #000;
         padding: 0 0px 0px 10px;
@@ -402,7 +403,7 @@
   /* Certificate footer signatures & publication dates */
   .cert-footer {
     position: absolute;
-    bottom: 12mm;
+    bottom: 10mm;
     left: 4mm;
     right: 4mm;
     display: flex;

@@ -13,7 +13,7 @@
   overflow: hidden;
 
   &.marksheet-paper {
-    padding: 15mm 16mm 15mm 16mm;
+    padding: 15mm 25mm 15mm 25mm;
 
     &.show-bg {
       background-image: url('/template.jpeg');
@@ -27,7 +27,7 @@
   }
 
   &.certificate-paper {
-    padding: 15mm 16mm;
+    padding: 15mm 22.5mm;
 
     &.show-bg {
       background-image: url('/template_certificate.jpeg');
@@ -56,6 +56,7 @@
         background-image: url('/template.jpeg') !important;
         background-size: 100% 100% !important;
       }
+
       &.hide-bg {
         background-image: none !important;
         background-color: transparent !important;
@@ -67,6 +68,7 @@
         background-image: url('/template_certificate.jpeg') !important;
         background-size: 100% 100% !important;
       }
+
       &.hide-bg {
         background-image: none !important;
         background-color: transparent !important;

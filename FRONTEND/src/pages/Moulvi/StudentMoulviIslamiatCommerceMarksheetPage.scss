@@ -67,8 +67,8 @@
 
   .moulvi-ms-no-overlay {
     position: absolute;
-    right: 22mm;
-    top: 15mm;
+    right: 22.5mm;
+    top: 28mm;
     font-family: 'Outfit', 'Inter', 'Segoe UI', sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -89,14 +89,15 @@
 
   .moulvi-exam-title {
     text-align: center;
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 700;
     margin: 0 0 18px 0;
     text-decoration: none;
-    letter-spacing: 1.4px;
+    letter-spacing: 0.2px;
     color: #0b5e9e;
     display: block;
-    padding-bottom: 3px;
+    // padding-bottom: 3px;
+    white-space: nowrap;
   }
 
   .moulvi-student-info-section {
@@ -417,7 +418,7 @@
   .moulvi-marksheet-footer {
     position: absolute;
     margin: 0px 12px;
-    bottom: 4mm;
+    bottom: 10mm;
     left: 0;
     right: 0;
     display: flex;

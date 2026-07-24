@@ -84,8 +84,8 @@
   /* Certificate Number top right overlay */
   .moulvi-cert-no-overlay {
     position: absolute;
-    top: 20mm;
-    right: 16mm;
+    top: 26mm;
+    right: 22.5mm;
     display: flex;
     align-items: flex-end;
     width: 40mm;
@@ -141,12 +141,13 @@
 
     .moulvi-cert-title {
       font-family: "Georgia", Times, serif;
-      font-size: 16px;
+      font-size: 17.4px;
       font-weight: bold;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.2px;
       text-transform: uppercase;
       margin: 0;
       color: #000;
+      white-space: nowrap;
 
       sup {
         text-transform: none;
@@ -154,8 +155,8 @@
 
       .year-value-dotted {
         font-family: "Arial", sans-serif;
-        font-size: 16px;
-        letter-spacing: 0.8px;
+        font-size: 17.4px;
+        letter-spacing: 0.2px;
         // border-bottom: 1px dotted #000;
         padding: 0 0px 0px 5px;
         // min-width: 32mm;
@@ -394,7 +395,7 @@
   /* Certificate footer signatures & publication dates */
   .moulvi-cert-footer {
     position: absolute;
-    bottom: 12mm;
+    bottom: 10mm;
     left: 4mm;
     right: 4mm;
     display: flex;
