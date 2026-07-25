@@ -1,28 +1,4 @@
-import axios from 'axios'
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  import.meta.env.VITE_BACKEND_SERVER_URL ||
-  import.meta.env.BACKEND_SERVER_URL ||
-  'http://localhost:5500/api/v1'
-
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-})
-
-const getApiErrorMessage = (error) => {
-  if (axios.isAxiosError(error)) {
-    return (
-      error.response?.data?.message ||
-      error.response?.data?.error ||
-      error.message ||
-      'Request failed'
-    )
-  }
-
-  return error?.message || 'Request failed'
-}
+import { apiClient, getApiErrorMessage } from './apiClient'
 
 const unwrapApiPayload = (payload) => {
   return payload.data || payload.record || payload.student || payload
@@ -55,6 +31,24 @@ export const searchCertificateRecord = async (filters) => {
     })
 
     return unwrapApiPayload(response.data)
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error), { cause: error })
+  }
+}
+
+export const logCertificatePrintApi = async (filters) => {
+  try {
+    const response = await apiClient.post('/certificate/print-log', {
+      ...filters,
+      searchBy:
+        filters.searchBy === 'registrationNo'
+          ? 'Rgn'
+          : filters.searchBy === 'rollNo'
+            ? 'RollNo'
+            : filters.searchBy,
+    })
+
+    return response.data
   } catch (error) {
     throw new Error(getApiErrorMessage(error), { cause: error })
   }

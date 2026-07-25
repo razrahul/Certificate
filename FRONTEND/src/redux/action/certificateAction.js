@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { searchCertificateRecord } from '../../services/certificateService'
+import { searchCertificateRecord, logCertificatePrintApi } from '../../services/certificateService'
 
 export const searchCertificateAction = createAsyncThunk(
   'certificate/search',
@@ -11,6 +11,17 @@ export const searchCertificateAction = createAsyncThunk(
         error.message ||
           'Certificate record nahi mila. Year, standard, district aur number check karein.',
       )
+    }
+  },
+)
+
+export const logCertificatePrintAction = createAsyncThunk(
+  'certificate/logPrint',
+  async (filters, { rejectWithValue }) => {
+    try {
+      return await logCertificatePrintApi(filters)
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to log print action')
     }
   },
 )

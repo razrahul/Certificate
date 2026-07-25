@@ -1,0 +1,63 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 2000; /* Ensure high priority visibility */
+
+  .modal-content {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    &--wide {
+      max-width: 650px;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 { margin: 0; font-size: 1.15rem; font-weight: 850; color: #0f172a; }
+      p { margin: 2px 0 0; font-size: 0.72rem; color: #64748b; font-weight: 600; }
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-top: 1px solid #cbd5e1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+  }
+}
+
+/* Modal specific form alerts */
+.msg-error {
+  color: #e11d48;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.msg-success {
+  color: #059669;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 4px 0;
+}

@@ -22,6 +22,8 @@ const userService = {
    */
   async findUserForMysql(loginIdentifier) {
     try {
+      if (!loginIdentifier) return null;
+
       return await User.findOne({
         where: {
           [Op.or]: [
