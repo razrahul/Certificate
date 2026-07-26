@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { searchCertificateRecord, logCertificatePrintApi } from '../../services/certificateService'
+import { searchCertificateRecord, logCertificatePrintApi, updateCertificateRecord } from '../../services/certificateService'
 
 export const searchCertificateAction = createAsyncThunk(
   'certificate/search',
@@ -25,3 +25,16 @@ export const logCertificatePrintAction = createAsyncThunk(
     }
   },
 )
+
+export const updateCertificateAction = createAsyncThunk(
+  'certificate/update',
+  async ({ filters, updates }, { rejectWithValue }) => {
+    try {
+      const response = await updateCertificateRecord(filters, updates)
+      return response.data || response
+    } catch (error) {
+      return rejectWithValue(error.message || 'Failed to update certificate record')
+    }
+  },
+)
+

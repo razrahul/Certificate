@@ -53,3 +53,26 @@ export const logCertificatePrintApi = async (filters) => {
     throw new Error(getApiErrorMessage(error), { cause: error })
   }
 }
+
+export const updateCertificateRecord = async (filters, updates) => {
+  try {
+    const response = await apiClient.put('/certificate/updateTR', {
+      year: filters.year,
+      standard: filters.standard,
+      district: filters.district,
+      searchBy:
+        filters.searchBy === 'registrationNo'
+          ? 'Rgn'
+          : filters.searchBy === 'rollNo'
+            ? 'RollNo'
+            : filters.searchBy,
+      searchValue: filters.searchValue,
+      ...updates,
+    })
+
+    return response.data
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error), { cause: error })
+  }
+}
+
