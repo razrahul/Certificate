@@ -156,13 +156,13 @@ function AppRoutes() {
       <Route element={<AppLayout />}>
         
         {/* Public Routes */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<Suspense fallback={<Loader />}><HomePage onRouteChange={handleLegacyRouteChange} /></Suspense>} />
-        <Route path="/about" element={<Suspense fallback={<Loader />}><AboutPage /></Suspense>} />
         <Route path="/login" element={<Suspense fallback={<Loader />}><LoginPage /></Suspense>} />
 
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Suspense fallback={<Loader />}><HomePage onRouteChange={handleLegacyRouteChange} /></Suspense>} />
+          <Route path="/about" element={<Suspense fallback={<Loader />}><AboutPage /></Suspense>} />
           <Route path="/certificate" element={<Suspense fallback={<Loader />}><CertificateSearch /></Suspense>} />
           <Route path="/student" element={<Suspense fallback={<Loader />}><StudentDetailsPage /></Suspense>} />
           <Route path="/studentmarksheet" element={<StudentMarksheetWrapper onRouteChange={handleLegacyRouteChange} />} />

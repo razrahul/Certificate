@@ -44,7 +44,7 @@ function Header({
         </Link>
 
         <nav aria-label="Primary navigation" className="site-nav">
-          {displayRoutes.map((route) => (
+          {isAuthenticated && displayRoutes.map((route) => (
             <NavLink
               className={({ isActive }) => isActive ? 'is-active' : ''}
               key={route.id}
