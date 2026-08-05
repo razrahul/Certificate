@@ -346,10 +346,10 @@ function StudentMarksheetPage({ onRouteChange }) {
             </div>
             <div className="footer-sigs">
               <div className="sig-block">
-                <span>Controller of Examnation</span>
+                <span>Asst.</span>
               </div>
               <div className="sig-block">
-                <span>Secretary</span>
+                <span>Controller of Examnations</span>
               </div>
             </div>
           </div>
