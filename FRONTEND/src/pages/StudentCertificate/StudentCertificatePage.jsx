@@ -8,7 +8,7 @@ import {
   getTotalMarks,
   makeCertificateNumber,
   getUrduTitleText,
-  getUrduYear
+  getUrduYear,
 } from "../../utils/certificate";
 import PrintPaper from "../../components/PrintPaper/PrintPaper";
 import { fauquania, getPublicationDate } from "../../utils/subject";
@@ -33,13 +33,18 @@ function StudentCertificatePage({ onRouteChange }) {
 
   const totalObtained = getTotalMarks(student);
   const divisionName = divisionFromCode(student.Div, totalObtained);
-  const classInfo = getClassStandardDisplayName(student.className || student.Class);
+  const classInfo = getClassStandardDisplayName(
+    student.className || student.Class,
+  );
 
   // Dynamic formatting of compulsory subjects list with '&' before the last one
   const subjectsList = fauquania.compulsory_subjects || [];
-  const formattedSubjects = subjectsList.length > 0
-    ? subjectsList.slice(0, -1).join(", ") + " & " + subjectsList[subjectsList.length - 1]
-    : "";
+  const formattedSubjects =
+    subjectsList.length > 0
+      ? subjectsList.slice(0, -1).join(", ") +
+        " & " +
+        subjectsList[subjectsList.length - 1]
+      : "";
 
   const handlePrint = () => {
     dispatch(markCertificatePrinted(student.id));
@@ -83,7 +88,8 @@ function StudentCertificatePage({ onRouteChange }) {
           {/* Exam Title & Year */}
           <div className="cert-title-section">
             <div className="cert-urdu-title">
-              {getUrduTitleText(classInfo.name)} {getUrduYear(student.year || "2026")}
+              {getUrduTitleText(classInfo.name)}{" "}
+              {getUrduYear(student.year || "2026")}
             </div>
             <h2 className="cert-title">
               CERTIFICATE FOR {classInfo.name}
@@ -103,7 +109,9 @@ function StudentCertificatePage({ onRouteChange }) {
           <div className="cert-body-lines">
             {/* Row 1: Candidate Name */}
             <div className="cert-line-row">
-              <span className="cert-label certify-label">This is to certify that</span>
+              <span className="cert-label certify-label">
+                This is to certify that
+              </span>
               <div className="dotted-line-fill name-line">
                 <span className="faq-value name-value">
                   {student.studentName || student.Name || ""}
@@ -170,7 +178,9 @@ function StudentCertificatePage({ onRouteChange }) {
                   </>
                 )}
               </span>
-              <span className="cert-label placed-label">Examination and was placed</span>
+              <span className="cert-label placed-label">
+                Examination and was placed
+              </span>
             </div>
 
             {/* Row 7: placed in the ... Division, in the year ... from Madrasa: */}
@@ -181,27 +191,38 @@ function StudentCertificatePage({ onRouteChange }) {
                   {divisionName ? divisionName.toUpperCase() : ""}
                 </span>
               </div>
-              <span className="cert-label div-suffix-label">Division, in the year</span>
+              <span className="cert-label div-suffix-label">
+                Division, in the year
+              </span>
               <div className="dotted-line-fill year-line">
                 <span className="faq-value">{student.year || "2026"}</span>
               </div>
-              <span className="cert-label from-madrasa-label">from Madrasa :</span>
+              <span className="cert-label from-madrasa-label">
+                from Madrasa :
+              </span>
             </div>
 
             {/* Row 8: Madrasa Name */}
             <div className="cert-line-row madrasa-name-row">
               <div className="dotted-line-fill full-width-line">
                 <span className="faq-value madrasa-value">
-                  {student.madrasaName || student.Madrasa || student.NomMad || ""}
+                  {student.madrasaName ||
+                    student.Madrasa ||
+                    student.NomMad ||
+                    ""}
                 </span>
               </div>
             </div>
 
             {/* Row 9: Compulsory Subjects list */}
             <div className="cert-line-row subjects-row">
-              <span className="cert-label subjects-label">Compulsory Subjects : </span>
+              <span className="cert-label subjects-label">
+                Compulsory Subjects :{" "}
+              </span>
               <div className="subjects-value-container">
-                <span className="faq-value subjects-value">{formattedSubjects}</span>
+                <span className="faq-value subjects-value">
+                  {formattedSubjects}
+                </span>
               </div>
             </div>
           </div>
@@ -212,17 +233,27 @@ function StudentCertificatePage({ onRouteChange }) {
               <span className="cert-label pub-label">Date of Publication</span>
               <div className="dotted-line-fill pub-line">
                 <span className="faq-value">
-                  {formatDate(student.issueDate || getPublicationDate(student.className || student.Class, student.year, "certificate"))}
+                  {formatDate(
+                    student.issueDate ||
+                      getPublicationDate(
+                        student.className || student.Class,
+                        student.year,
+                        "certificate",
+                      ),
+                  )}
                 </span>
               </div>
             </div>
 
-            <div className="sig-box coe-box">
-              <span className="cert-label signature-title">C.O.E.</span>
-            </div>
-
-            <div className="sig-box secretary-box">
-              <span className="cert-label signature-title">Secretary</span>
+            <div className="cert-footer-sigs">
+              <div className="cert-sig-block">
+                <span className="cert-sig-lbl">
+                  Controller of Examnations
+                </span>
+              </div>
+              <div className="cert-sig-block">
+                <span className="cert-sig-lbl">Secretary</span>
+              </div>
             </div>
           </div>
         </div>
