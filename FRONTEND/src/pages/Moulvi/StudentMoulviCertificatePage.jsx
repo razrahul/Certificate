@@ -7,8 +7,8 @@ import {
   getYearFromRecord,
   makeCertificateNumber,
   getClassStandardDisplayName,
-  getUrduTitleText,
-  getUrduYear,
+  // getUrduTitleText,
+  // getUrduYear,
 } from "../../utils/certificate";
 import PrintPaper from "../../components/PrintPaper/PrintPaper";
 import { getPublicationDate, getMoulviSubjects } from "../../utils/subject";
@@ -140,10 +140,10 @@ function StudentMoulviCertificatePage({ onRouteChange }) {
 
           {/* Exam Title & Year */}
           <div className="moulvi-cert-title-section">
-            <div className="moulvi-cert-urdu-title">
+            {/* <div className="moulvi-cert-urdu-title">
               {getUrduTitleText(classInfo.name, streamName)}{" "}
               {getUrduYear(student.year || "2026")}
-            </div>
+            </div> */}
             <h2 className="moulvi-cert-title">
               CERTIFICATE FOR {classInfo.name}
               {classInfo.suffixNumber && (
