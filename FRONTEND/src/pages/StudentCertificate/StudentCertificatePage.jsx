@@ -7,8 +7,8 @@ import {
   getClassStandardDisplayName,
   getTotalMarks,
   makeCertificateNumber,
-  getUrduTitleText,
-  getUrduYear,
+  // getUrduTitleText,
+  // getUrduYear,
 } from "../../utils/certificate";
 import PrintPaper from "../../components/PrintPaper/PrintPaper";
 import { fauquania, getPublicationDate } from "../../utils/subject";
@@ -87,10 +87,10 @@ function StudentCertificatePage({ onRouteChange }) {
 
           {/* Exam Title & Year */}
           <div className="cert-title-section">
-            <div className="cert-urdu-title">
+            {/* <div className="cert-urdu-title">
               {getUrduTitleText(classInfo.name)}{" "}
               {getUrduYear(student.year || "2026")}
-            </div>
+            </div> */}
             <h2 className="cert-title">
               CERTIFICATE FOR {classInfo.name}
               {classInfo.suffixNumber && (
