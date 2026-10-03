@@ -1,101 +1,205 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Routes, Route, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import AppShell from '../container/AppShell'
-import AboutPage from '../pages/About/AboutPage'
-import CertificateSearch from '../pages/Certificate/CertificateSearch'
-import DashboardPage from '../pages/Dashboard/DashboardPage'
-import HomePage from '../pages/Home/HomePage'
-import LoginPage from '../pages/Login/LoginPage'
-import StudentCertificatePage from '../pages/StudentCertificate/StudentCertificatePage'
-import StudentDetailsPage from '../pages/StudentDeatils/StudentDetailsPage'
-import StudentMarksheetPage from '../pages/StudentMarksheet/StudentMarksheetPage'
-import StudentMoulviIslamiatCommerceMarksheetPage from '../pages/Moulvi/StudentMoulviIslamiatCommerceMarksheetPage'
-import StudentMoulviScienceArtsMarksheetPage from '../pages/Moulvi/StudentMoulviScienceArtsMarksheetPage'
-import StudentMoulviCertificatePage from '../pages/Moulvi/StudentMoulviCertificatePage'
+import Loader from '../components/common/Loader/Loader'
 import { logoutUser } from '../redux/reducer/userSlice'
 import { selectActiveStudent } from '../redux/reducer/certificateSlice.js'
-import { hiddenRoutes, pathToRouteId, routes } from './routeConfig'
+import { logCertificatePrintAction } from '../redux/action/certificateAction'
 
-const pageMap = {
-  home: HomePage,
-  certificate: CertificateSearch,
-  about: AboutPage,
-  dashboard: DashboardPage,
-  login: LoginPage,
-  student: StudentDetailsPage,
-  studentMarksheet: StudentMarksheetPage,
-  studentCertificate: StudentCertificatePage,
+// Lazy load routed components
+const AboutPage = lazy(() => import('../pages/About/AboutPage'))
+const CertificateSearch = lazy(() => import('../pages/Certificate/CertificateSearch'))
+const DashboardPage = lazy(() => import('../pages/Dashboard/DashboardPage'))
+const HomePage = lazy(() => import('../pages/Home/HomePage'))
+const LoginPage = lazy(() => import('../pages/Login/LoginPage'))
+const StudentCertificatePage = lazy(() => import('../pages/StudentCertificate/StudentCertificatePage'))
+const StudentDetailsPage = lazy(() => import('../pages/StudentDeatils/StudentDetailsPage'))
+const StudentMarksheetPage = lazy(() => import('../pages/StudentMarksheet/StudentMarksheetPage'))
+const StudentMoulviIslamiatCommerceMarksheetPage = lazy(() => import('../pages/Moulvi/StudentMoulviIslamiatCommerceMarksheetPage'))
+const StudentMoulviScienceArtsMarksheetPage = lazy(() => import('../pages/Moulvi/StudentMoulviScienceArtsMarksheetPage'))
+const StudentMoulviCertificatePage = lazy(() => import('../pages/Moulvi/StudentMoulviCertificatePage'))
+
+// Lazy load dashboard panel components
+const DashboardOverview = lazy(() => import('../pages/Dashboard/components/DashboardOverview'))
+const AuditLogsPanel = lazy(() => import('../pages/Dashboard/components/AuditLogsPanel'))
+const UserManagementPanel = lazy(() => import('../pages/Dashboard/components/UserManagementPanel'))
+const ProfileSettingsPanel = lazy(() => import('../pages/Dashboard/components/ProfileSettingsPanel'))
+
+// Protected Route Guard (checks authentication)
+function ProtectedRoute() {
+  const authUser = useSelector((state) => state.user.data)
+  const location = useLocation()
+
+  if (!authUser) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />
+  }
+  return <Outlet />
 }
 
-const getRouteFromPath = () =>
-  pathToRouteId[window.location.pathname.toLowerCase()] || 'home'
-
-function AppRoutes() {
-  const dispatch = useDispatch()
-  const [activeRoute, setActiveRoute] = useState(getRouteFromPath)
-  const activeStudent = useSelector(selectActiveStudent)
+// Role-Based Route Guard (checks RBAC role)
+function RoleRoute({ allowedRoles, fallbackPath = '/profile' }) {
   const authUser = useSelector((state) => state.user.data)
-  const certificateState = useSelector((state) => state.certificate)
-  const isAuthenticated = Boolean(authUser)
+  const role = (authUser?.role || 'USER').toUpperCase()
 
-  useEffect(() => {
-    const handlePopState = () => setActiveRoute(getRouteFromPath())
-    window.addEventListener('popstate', handlePopState)
-
-    return () => window.removeEventListener('popstate', handlePopState)
-  }, [])
-
-  const handleRouteChange = (routeId) => {
-    const route = [...routes, ...hiddenRoutes].find(
-      (item) => item.id === routeId,
-    )
-    const nextPath = route?.path || '/home'
-
-    window.history.pushState({}, '', nextPath)
-    setActiveRoute(routeId)
+  if (!allowedRoles.includes(role)) {
+    return <Navigate to={fallbackPath} replace />
   }
+  return <Outlet />
+}
+
+// Main shell layout that renders header/footer and dynamic routed view
+function AppLayout() {
+  const dispatch = useDispatch()
+  const authUser = useSelector((state) => state.user.data)
+  const isAuthenticated = Boolean(authUser)
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     dispatch(logoutUser())
-    handleRouteChange('home')
-  }
-
-  let CurrentPage = pageMap[activeRoute] || HomePage
-
-  if (activeRoute === 'studentMarksheet' && activeStudent) {
-    const className = String(activeStudent.className || activeStudent.Class || '').toLowerCase()
-    if (className.includes('moulvi')) {
-      const stream = String(activeStudent.Stream || '').toUpperCase().trim();
-      if (stream.includes('SCIENCE') || stream.includes('ARTS')) {
-        CurrentPage = StudentMoulviScienceArtsMarksheetPage
-      } else {
-        CurrentPage = StudentMoulviIslamiatCommerceMarksheetPage
-      }
-    }
-  }
-
-  if (activeRoute === 'studentCertificate' && activeStudent) {
-    const className = String(activeStudent.className || activeStudent.Class || '').toLowerCase()
-    if (className.includes('moulvi')) {
-      CurrentPage = StudentMoulviCertificatePage
-    }
+    navigate('/home')
   }
 
   return (
     <AppShell
-      activeRoute={activeRoute}
       authUser={authUser}
       isAuthenticated={isAuthenticated}
       onLogout={handleLogout}
-      onRouteChange={handleRouteChange}
     >
-      <CurrentPage
-        activeStudent={activeStudent}
-        authUser={authUser}
-        certificateState={certificateState}
-        onRouteChange={handleRouteChange}
-      />
+      <Outlet />
     </AppShell>
+  )
+}
+
+// Dynamic Student Marksheet selector wrapper
+function StudentMarksheetWrapper({ onRouteChange }) {
+  const activeStudent = useSelector(selectActiveStudent)
+  if (!activeStudent) {
+    return <Navigate to="/certificate" replace />
+  }
+
+  const className = String(activeStudent.className || activeStudent.Class || '').toLowerCase()
+  if (className.includes('moulvi')) {
+    const stream = String(activeStudent.Stream || '').toUpperCase().trim()
+    if (stream.includes('SCIENCE') || stream.includes('ARTS')) {
+      return (
+        <Suspense fallback={<Loader />}>
+          <StudentMoulviScienceArtsMarksheetPage onRouteChange={onRouteChange} />
+        </Suspense>
+      )
+    } else {
+      return (
+        <Suspense fallback={<Loader />}>
+          <StudentMoulviIslamiatCommerceMarksheetPage onRouteChange={onRouteChange} />
+        </Suspense>
+      )
+    }
+  }
+
+  return (
+    <Suspense fallback={<Loader />}>
+      <StudentMarksheetPage onRouteChange={onRouteChange} />
+    </Suspense>
+  )
+}
+
+// Dynamic Student Certificate selector wrapper
+function StudentCertificateWrapper({ onRouteChange }) {
+  const activeStudent = useSelector(selectActiveStudent)
+  if (!activeStudent) {
+    return <Navigate to="/certificate" replace />
+  }
+
+  const className = String(activeStudent.className || activeStudent.Class || '').toLowerCase()
+  if (className.includes('moulvi')) {
+    return (
+      <Suspense fallback={<Loader />}>
+        <StudentMoulviCertificatePage onRouteChange={onRouteChange} />
+      </Suspense>
+    )
+  }
+
+  return (
+    <Suspense fallback={<Loader />}>
+      <StudentCertificatePage onRouteChange={onRouteChange} />
+    </Suspense>
+  )
+}
+
+function AppRoutes() {
+  const dispatch = useDispatch()
+  const authUser = useSelector((state) => state.user.data)
+  const lastSearch = useSelector((state) => state.certificate.lastSearch)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleBeforePrint = () => {
+      if (authUser && lastSearch) {
+        dispatch(logCertificatePrintAction(lastSearch))
+      }
+    }
+    window.addEventListener('beforeprint', handleBeforePrint)
+    return () => window.removeEventListener('beforeprint', handleBeforePrint)
+  }, [dispatch, authUser, lastSearch])
+
+  const handleLegacyRouteChange = (routeId) => {
+    if (routeId === 'certificate') navigate('/certificate')
+    else if (routeId === 'dashboard') navigate('/dashboard')
+    else if (routeId === 'student') navigate('/student')
+    else if (routeId === 'studentMarksheet') navigate('/studentmarksheet')
+    else if (routeId === 'studentCertificate') navigate('/studentscertificate')
+    else navigate('/home')
+  }
+
+  return (
+    <Routes>
+      <Route element={<AppLayout />}>
+        
+        {/* Public Routes */}
+        <Route path="/login" element={<Suspense fallback={<Loader />}><LoginPage /></Suspense>} />
+
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Suspense fallback={<Loader />}><HomePage onRouteChange={handleLegacyRouteChange} /></Suspense>} />
+          <Route path="/about" element={<Suspense fallback={<Loader />}><AboutPage /></Suspense>} />
+          <Route path="/certificate" element={<Suspense fallback={<Loader />}><CertificateSearch /></Suspense>} />
+          <Route path="/student" element={<Suspense fallback={<Loader />}><StudentDetailsPage /></Suspense>} />
+          <Route path="/studentmarksheet" element={<StudentMarksheetWrapper onRouteChange={handleLegacyRouteChange} />} />
+          <Route path="/studentscertificate" element={<StudentCertificateWrapper onRouteChange={handleLegacyRouteChange} />} />
+
+          {/* Nested Dashboard Routes */}
+          <Route element={<DashboardPage />}>
+            
+            {/* stats overview - operators, admins, superadmins only */}
+            <Route element={<RoleRoute allowedRoles={['SUPERADMIN', 'ADMIN', 'OPERATOR']} fallbackPath="/profile" />}>
+              <Route path="/dashboard" element={<Suspense fallback={<Loader />}><DashboardOverview /></Suspense>} />
+            </Route>
+            
+            {/* update & print logs - admins and superadmins only */}
+            <Route element={<RoleRoute allowedRoles={['SUPERADMIN', 'ADMIN']} fallbackPath="/dashboard" />}>
+              <Route path="/dashboard/logs" element={<Suspense fallback={<Loader />}><AuditLogsPanel /></Suspense>} />
+            </Route>
+            
+            {/* user account management - superadmins only */}
+            <Route element={<RoleRoute allowedRoles={['SUPERADMIN']} fallbackPath="/dashboard" />}>
+              <Route path="/dashboard/users" element={<Suspense fallback={<Loader />}><UserManagementPanel /></Suspense>} />
+            </Route>
+
+            {/* personal details - all roles */}
+            <Route path="/profile" element={<Suspense fallback={<Loader />}><ProfileSettingsPanel user={authUser || {}} /></Suspense>} />
+            
+            {/* account security change password - all roles */}
+            <Route path="/profile/security" element={<Suspense fallback={<Loader />}><ProfileSettingsPanel user={authUser || {}} /></Suspense>} />
+
+          </Route>
+        </Route>
+
+      </Route>
+
+      {/* Wildcard Fallback */}
+      <Route path="*" element={<Navigate to="/home" replace />} />
+    </Routes>
   )
 }
 

@@ -2,8 +2,8 @@ export const boardProfile = {
   shortName: 'BSMEB',
   name: 'Bihar State Madrasa Education Board, Patna',
   address: '5, Vidyapati Marg, Patna - 800001',
-  phone: '+91-0612-2257860',
-  emails: ['bsmebpatna@yahoo.com', 'info@bsmeb.org'],
+  phone: '+91-7033438555 , +91-0612-2520099',
+  emails: ['bsmebpatna1@gmail.com', 'help.bsmeb.@gmail.com'],
   website: 'www.bsmeb.org',
   recognition:
     'Recognised by Government of Bihar, COBSE Delhi and Northwest Accreditation Commission.',
@@ -13,6 +13,7 @@ export const boardHighlights = [
   { label: 'Students', value: '7,00,000+' },
   { label: 'Madrasas', value: '3,000+' },
   { label: 'Teachers', value: '15,000+' },
+  { label: 'Departments', value: '4' },
 ]
 
 export const onlineServices = [
@@ -50,7 +51,7 @@ export const boardOfficials = [
   {
     name: 'Shri Vijay Kumar Choudhary',
     title: 'Honorable Deputy Chief Minister, Bihar',
-    badge: 'DM',
+    badge: 'DCM',
   },
   {
     name: 'Janab Saleem Perwez',

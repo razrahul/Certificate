@@ -4,9 +4,9 @@ import { verifyToken, authorizeRoles } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// Only SUPERADMIN and ADMIN are allowed to view audit logs and stats
-router.get("/stats", verifyToken, authorizeRoles("SUPERADMIN", "ADMIN"), getDashboardStats);
-router.get("/updates", verifyToken, authorizeRoles("SUPERADMIN", "ADMIN"), getUpdateLogs);
-router.get("/prints", verifyToken, authorizeRoles("SUPERADMIN", "ADMIN"), getPrintLogs);
+// Allowed roles for dashboard stats and audit logs
+router.get("/stats", verifyToken, authorizeRoles("SUPERADMIN", "ADMIN", "OPERATOR"), getDashboardStats);
+router.get("/updates", verifyToken, authorizeRoles("SUPERADMIN", "ADMIN", "OPERATOR"), getUpdateLogs);
+router.get("/prints", verifyToken, authorizeRoles("SUPERADMIN", "ADMIN", "OPERATOR"), getPrintLogs);
 
 export default router;

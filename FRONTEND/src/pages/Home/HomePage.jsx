@@ -9,7 +9,7 @@ import {
 } from '../../services/boardData'
 import './HomePage.scss'
 
-function HomePage({ certificateState, onRouteChange }) {
+function HomePage({ onRouteChange }) {
   return (
     <div className="home-page">
       <section className="official-hero">
@@ -62,7 +62,6 @@ function HomePage({ certificateState, onRouteChange }) {
         {boardHighlights.map((item) => (
           <MetricCard key={item.label} {...item} />
         ))}
-        <MetricCard label="Ready Certificates" value={certificateState.students.length} />
       </section>
 
       <section className="initiative-section">

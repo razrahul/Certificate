@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { searchCertificateAction } from "../../redux/action/certificateAction";
 import {
   classOptions,
@@ -21,8 +22,9 @@ const initialSearch = {
 
 const displayValue = (value) => value || "Not available";
 
-function CertificateSearch({ onRouteChange }) {
+function CertificateSearch() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { error, searchResult, searchStatus } = useSelector(
     (state) => state.certificate,
   );
@@ -139,21 +141,19 @@ function CertificateSearch({ onRouteChange }) {
             <div className="result-actions">
               <button
                 className="result-action-primary"
-                onClick={() => onRouteChange("student")}
+                onClick={() => navigate("/student")}
                 type="button"
               >
                 View
               </button>
               <button
-                onClick={() => onRouteChange("studentMarksheet")}
+                onClick={() => navigate("/studentmarksheet")}
                 type="button"
               >
                 Marksheet
               </button>
               <button
-                onClick={() => {
-                  onRouteChange("studentCertificate");
-                }}
+                onClick={() => navigate("/studentscertificate")}
                 type="button"
               >
                 Certificate

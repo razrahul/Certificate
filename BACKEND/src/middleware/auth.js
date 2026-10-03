@@ -34,6 +34,10 @@ export const verifyToken = async (req, res, next) => {
       return sendErrorResponse(res, "Access denied. User not found.", {}, 401);
     }
 
+    if (!user.isActive) {
+      return sendErrorResponse(res, "Access denied. User account is inactive.", {}, 401);
+    }
+
     // Check if token session version matches user's database version
     if (decoded.tokenVersion !== user.tokenVersion) {
       return sendErrorResponse(res, "Session expired or logged out. Please login again.", {}, 401);

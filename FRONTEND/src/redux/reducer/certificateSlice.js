@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { searchCertificateAction } from '../action/certificateAction'
+import { searchCertificateAction, updateCertificateAction } from '../action/certificateAction'
 
 const firstValue = (record, keys) => {
   for (const key of keys) {
@@ -92,6 +92,26 @@ const certificateSlice = createSlice({
       .addCase(searchCertificateAction.rejected, (state, action) => {
         state.error = action.payload || 'Certificate record not found'
         state.searchResult = null
+        state.searchStatus = 'failed'
+      })
+      .addCase(updateCertificateAction.pending, (state) => {
+        state.error = ''
+        state.searchStatus = 'loading'
+      })
+      .addCase(updateCertificateAction.fulfilled, (state, action) => {
+        const filters = state.lastSearch || {}
+        const record = action.payload
+        const normalizedRecord = normalizeCertificateRecord(record, filters)
+
+        state.error = ''
+        state.searchResult = normalizedRecord
+        state.searchStatus = 'succeeded'
+        state.students = state.students.map((student) =>
+          student.id === state.activeStudentId ? normalizedRecord : student
+        )
+      })
+      .addCase(updateCertificateAction.rejected, (state, action) => {
+        state.error = action.payload || 'Failed to update certificate record'
         state.searchStatus = 'failed'
       })
   },

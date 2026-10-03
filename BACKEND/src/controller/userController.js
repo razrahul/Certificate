@@ -1,4 +1,5 @@
 import userService from "../services/userService.js";
+import User from "../model/user.js";
 import { sendSuccessResponse, sendErrorResponse } from "../utils/response.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -55,6 +56,7 @@ export const registerUser = async (req, res) => {
       department,
       role,
       office,
+      isActive: true,
     });
 
     const userData = user.toJSON();
@@ -68,7 +70,7 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { email, username, password, rememberMe } = req.body;
     const loginIdentifier = email || username;
 
     if (!loginIdentifier || !password) {
@@ -81,6 +83,10 @@ export const loginUser = async (req, res) => {
       return sendErrorResponse(res, "User not found", {}, 404);
     }
 
+    if (!user.isActive) {
+      return sendErrorResponse(res, "Your account is inactive. Please contact admin.", {}, 403);
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -90,19 +96,24 @@ export const loginUser = async (req, res) => {
     const userData = user.toJSON();
     delete userData.password;
 
-    // Generate JWT token
+    // Generate JWT token with custom expiry if rememberMe is true
+    const tokenExpiry = rememberMe ? "7d" : (process.env.JWT_EXPIRE || "24h");
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role, tokenVersion: user.tokenVersion },
       process.env.JWT_SECRET || "super_secret_jwt_key_development_987654321",
-      { expiresIn: process.env.JWT_EXPIRE || "24h" }
+      { expiresIn: tokenExpiry }
     );
 
-    // Set cookie options
+    // Set cookie options (30 days if rememberMe, otherwise default process.env.JWT_COOKIE_EXPIRE or 24 hours)
+    const cookieMaxAge = rememberMe
+      ? 7 * 24 * 60 * 60 * 1000 // 7 days
+      : (Number(process.env.JWT_COOKIE_EXPIRE) || 24 * 60 * 60 * 1000);
+
     const cookieOptions = {
       httpOnly: true, // Blocks XSS attacks
       secure: process.env.NODE_ENV === "production", // HTTPS only in production
       sameSite: "lax", // Protects against CSRF
-      maxAge: Number(process.env.JWT_COOKIE_EXPIRE) || 24 * 60 * 60 * 1000, // Fallback to 24 hours
+      maxAge: cookieMaxAge,
     };
 
     res.cookie("token", token, cookieOptions);
@@ -211,5 +222,64 @@ export const getUserProfile = async (req, res) => {
     sendSuccessResponse(res, "User profile fetched successfully", userData, 200);
   } catch (error) {
     sendErrorResponse(res, "Error fetching user profile", error.message, 500);
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: { exclude: ["password"] },
+      order: [["createdAt", "DESC"]],
+    });
+    sendSuccessResponse(res, "Users fetched successfully", users, 200);
+  } catch (error) {
+    sendErrorResponse(res, "Error fetching users", error.message, 500);
+  }
+};
+
+export const toggleUserActive = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return sendErrorResponse(res, "User email is required", {}, 400);
+    }
+    const user = await userService.findUserForMysql(email);
+    if (!user) {
+      return sendErrorResponse(res, "User not found", {}, 404);
+    }
+
+    user.isActive = !user.isActive;
+    if (!user.isActive) {
+      user.tokenVersion += 1;
+    }
+    await user.save();
+
+    const userData = user.toJSON();
+    delete userData.password;
+
+    sendSuccessResponse(res, `User account ${user.isActive ? 'activated' : 'deactivated'} successfully`, userData, 200);
+  } catch (error) {
+    sendErrorResponse(res, "Error toggling user active status", error.message, 500);
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const { name, phone, department, office } = req.body;
+    const user = req.user;
+
+    if (name) user.name = name;
+    if (phone !== undefined) user.phone = phone;
+    if (department) user.department = department;
+    if (office) user.office = office;
+
+    await user.save();
+
+    const userData = user.toJSON();
+    delete userData.password;
+
+    sendSuccessResponse(res, "Profile updated successfully", userData, 200);
+  } catch (error) {
+    sendErrorResponse(res, "Error updating profile", error.message, 500);
   }
 };

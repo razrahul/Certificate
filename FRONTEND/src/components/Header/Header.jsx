@@ -1,14 +1,28 @@
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { boardProfile } from '../../services/boardData'
+import UserMenu from '../common/UserMenu/UserMenu'
 import './Header.scss'
 
+const displayRoutes = [
+  { id: 'home', label: 'Home', path: '/home' },
+  { id: 'about', label: 'About', path: '/about' },
+  { id: 'certificate', label: 'Certificate', path: '/certificate' },
+]
+
 function Header({
-  activeRoute,
-  authUser,
   isAuthenticated,
   onLogout,
-  onRouteChange,
-  routes,
 }) {
+  const location = useLocation()
+
+  // Derive activeRoute from path
+  const currentPath = location.pathname.toLowerCase()
+  let activeRoute = 'home'
+  if (currentPath.startsWith('/about')) activeRoute = 'about'
+  if (currentPath.startsWith('/certificate')) activeRoute = 'certificate'
+  if (currentPath.startsWith('/dashboard')) activeRoute = 'dashboard'
+  if (currentPath.startsWith('/login')) activeRoute = 'login'
+
   return (
     <header className="site-header">
       <div className="top-contact">
@@ -17,42 +31,41 @@ function Header({
       </div>
 
       <div className="header-main">
-        <button
+        <Link
           aria-label="Go to home"
           className="brand"
-          onClick={() => onRouteChange('home')}
-          type="button"
+          to="/home"
         >
-          <span className="brand__seal">B</span>
+          <img src="/Logo.png" alt="BSMEB Logo" className="brand__logo" />
           <span>
             <strong>{boardProfile.shortName}</strong>
             <small>{boardProfile.name}</small>
           </span>
-        </button>
+        </Link>
 
         <nav aria-label="Primary navigation" className="site-nav">
-          {routes.map((route) => (
-            <button
-              className={activeRoute === route.id ? 'is-active' : ''}
+          {isAuthenticated && displayRoutes.map((route) => (
+            <NavLink
+              className={({ isActive }) => isActive ? 'is-active' : ''}
               key={route.id}
-              onClick={() => onRouteChange(route.id)}
-              type="button"
+              to={route.path}
             >
               {route.label}
-            </button>
+            </NavLink>
           ))}
+
           {isAuthenticated ? (
-            <button className="nav-user" onClick={onLogout} type="button">
-              {authUser?.name || 'Logout'}
-            </button>
+            <UserMenu
+              activeRoute={activeRoute}
+              onLogout={onLogout}
+            />
           ) : (
-            <button
-              className={activeRoute === 'login' ? 'is-active' : ''}
-              onClick={() => onRouteChange('login')}
-              type="button"
+             <NavLink
+              className={({ isActive }) => isActive ? 'is-active' : ''}
+              to="/login"
             >
               Login
-            </button>
+            </NavLink>
           )}
         </nav>
       </div>

@@ -31,6 +31,7 @@ export const loginUserSchema = z.object({
     email: z.string().email("Invalid email format").optional(),
     username: z.string().optional(),
     password: z.string({ required_error: "Password is required" }),
+    rememberMe: z.boolean().optional(),
   }).refine((data) => data.email || data.username, {
     message: "At least one of email or username is required to login",
     path: ["email"],
@@ -63,6 +64,23 @@ export const adminResetPasswordSchema = z.object({
   body: z.object({
     email: z.string({ required_error: "Target email is required" }).email("Invalid email format"),
     newPassword: z.string({ required_error: "New password is required" }).min(6, "New password must be at least 6 characters long"),
+  }),
+});
+
+// Validation schema for updating user profile (current logged-in user)
+export const updateUserProfileSchema = z.object({
+  body: z.object({
+    name: z.string().min(2, "Name must be at least 2 characters long").optional(),
+    phone: z.string().optional(),
+    department: z.string().optional(),
+    office: z.enum(["patna_office", "purnia_office"]).optional(),
+  }),
+});
+
+// Validation schema for toggling user active status (SUPERADMIN only)
+export const toggleUserActiveSchema = z.object({
+  body: z.object({
+    email: z.string({ required_error: "Target email is required" }).email("Invalid email format"),
   }),
 });
 
